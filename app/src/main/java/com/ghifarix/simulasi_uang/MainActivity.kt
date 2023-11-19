@@ -1,25 +1,60 @@
 package com.ghifarix.simulasi_uang
 
+import android.annotation.SuppressLint
+import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Divider
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDrawerState
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
+import com.ghifarix.simulasi_uang.screens.kpr.input.KPR_INPUT_ROUTE
+import com.ghifarix.simulasi_uang.screens.kpr.input.kprInputNav
 import kotlin.math.pow
 
-class MainActivity: ComponentActivity() {
+class MainActivity : ComponentActivity() {
+
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            val navController = rememberNavController()
+            val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+            ModalNavigationDrawer(
+                drawerState = drawerState,
+                gesturesEnabled = true,
+                drawerContent = {
+                    ModalDrawerSheet {
+                        Text("Drawer title", modifier = Modifier.padding(16.dp))
+                        Divider()
+                        NavigationDrawerItem(
+                            label = { Text(text = "KPR") },
+                            selected = false,
+                            onClick = { /*TODO*/ }
+                        )
+                        NavigationDrawerItem(
+                            label = { Text(text = "Leasing") },
+                            selected = false,
+                            onClick = { /*TODO*/ }
+                        )
+                    }
+                }) {
+                NavHost(navController = navController, startDestination = KPR_INPUT_ROUTE){
+                    kprInputNav(navController = navController, drawerState = drawerState)
+                }
+            }
+        }
+    }
+
 }
 
-fun calculate(){
-    val pinjamanPokok =100000000F
-    var sisaPinjaman = pinjamanPokok
-    val tenor = 10
-    val bunga = 10F
-    val angsuran = pinjamanPokok.times(bunga/100/12) / (1F-1F/((1F + (bunga / 100) / 12)).pow(tenor.times(12)))
-    println("angsuran $angsuran ")
-    for(i in 0 until 10*12){
-        val bungaBayar = sisaPinjaman.times(bunga/100/12)
-        val pokok = angsuran-bungaBayar
-        sisaPinjaman -= pokok
-        if(sisaPinjaman < 0F){
-            sisaPinjaman = 0F
-        }
-        println("$i bunga $bungaBayar, pokok $pokok, sisa $sisaPinjaman")
-    }
-}
