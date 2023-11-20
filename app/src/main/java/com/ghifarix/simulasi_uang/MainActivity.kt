@@ -20,8 +20,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.ghifarix.simulasi_uang.screens.kpr.input.KPR_INPUT_ROUTE
 import com.ghifarix.simulasi_uang.screens.kpr.input.kprInputNav
+import dagger.hilt.android.AndroidEntryPoint
 import kotlin.math.pow
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
