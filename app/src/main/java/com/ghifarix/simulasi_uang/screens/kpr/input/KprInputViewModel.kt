@@ -17,7 +17,7 @@ import kotlin.math.pow
 
 @HiltViewModel
 class KprInputViewModel @Inject constructor() : ViewModel() {
-    private var _kprType:KprType = KprType.ANUITAS
+    private var _kprType: KprType = KprType.ANUITAS
     private var _baseLoan = 0.0
     private var _years = 0
     private var _interest = 0.0
@@ -25,11 +25,11 @@ class KprInputViewModel @Inject constructor() : ViewModel() {
     private val _state: MutableStateFlow<KprInputState> = MutableStateFlow(KprInputState.Idle)
     val state: StateFlow<KprInputState> = _state
     private val _dpAmount: MutableStateFlow<String> = MutableStateFlow("0.0")
-    val dpAmount:StateFlow<String> = _dpAmount
+    val dpAmount: StateFlow<String> = _dpAmount
 
     fun updateBaseLoan(loan: String) {
         viewModelScope.launch {
-            _baseLoan = if (loan.isNullOrBlank()) {
+            _baseLoan = if (loan.isBlank()) {
                 0.0
             } else {
                 loan.replace(",", "").toDouble()
@@ -46,7 +46,7 @@ class KprInputViewModel @Inject constructor() : ViewModel() {
 
     fun updateDp(dp: String) {
         viewModelScope.launch {
-            _dp = if (dp.isNullOrBlank()) {
+            _dp = if (dp.isBlank()) {
                 0.0
             } else {
                 dp.replace(",", "").toDouble()
@@ -56,10 +56,9 @@ class KprInputViewModel @Inject constructor() : ViewModel() {
     }
 
 
-
     fun updateYears(years: String) {
         viewModelScope.launch {
-            _years = if (years.isNullOrBlank()) {
+            _years = if (years.isBlank()) {
                 0
             } else {
                 years.toInt()
@@ -69,7 +68,7 @@ class KprInputViewModel @Inject constructor() : ViewModel() {
 
     fun updateRate(rate: String) {
         viewModelScope.launch {
-            _interest = if (rate.isNullOrBlank()) {
+            _interest = if (rate.isBlank()) {
                 0.0
             } else {
                 rate.toDouble()
@@ -79,25 +78,28 @@ class KprInputViewModel @Inject constructor() : ViewModel() {
 
     fun calculate() {
         viewModelScope.launch {
-            when(_kprType){
+            when (_kprType) {
                 KprType.ANUITAS -> {
                     calculateAnuitas()
                 }
+
                 KprType.EFEKTIF -> {
-                    _dpAmount.value = "100"
+                    calculateEfektif()
                 }
+
                 KprType.FLAT -> {
-                    _dpAmount.value = "100.00"
+                    calculateFlat()
                 }
             }
         }
     }
 
-    private fun calculateDp(){
-        _dpAmount.value = (_baseLoan * _dp /100).roundOffDecimal()
+    private fun calculateDp() {
+        _dpAmount.value = (_baseLoan * _dp / 100).roundOffDecimal()
     }
+
     private fun calculateAnuitas() {
-        var remainingLoan = _baseLoan - (_baseLoan * _dp /100)
+        var remainingLoan = _baseLoan - (_baseLoan * _dp / 100)
         val interest = _interest
         val installments =
             remainingLoan.times(interest / 100 / 12) / (1.0 - 1.0 / (1.0 + (interest / 100) / 12).pow(
@@ -125,68 +127,134 @@ class KprInputViewModel @Inject constructor() : ViewModel() {
                 )
             )
         }
-        kprItems.add(KprItem("Total", capital = _baseLoan.roundOffDecimal(), interest = totalInterest.roundOffDecimal(), installments = _baseLoan.plus(totalInterest).roundOffDecimal()))
+        kprItems.add(
+            KprItem(
+                "Total",
+                capital = _baseLoan.roundOffDecimal(),
+                interest = totalInterest.roundOffDecimal(),
+                installments = _baseLoan.plus(totalInterest).roundOffDecimal()
+            )
+        )
         val kpr = Kpr(
             installmentsType = _kprType,
             interest = _interest,
             years = _years,
             kprItems = kprItems,
             totalLoan = _baseLoan.roundOffDecimal(),
-            loanToPay =  (_baseLoan * (100 -_dp) /100).roundOffDecimal(),
+            loanToPay = (_baseLoan * (100 - _dp) / 100).roundOffDecimal(),
             dp = _dp,
             dpAmount = _dpAmount.value,
-            interestAtPercentage = (totalInterest/_baseLoan*100).roundOffDecimal(),
+            interestAtPercentage = (totalInterest / _baseLoan * 100).roundOffDecimal(),
             interestAmount = totalInterest.roundOffDecimal()
         )
         SingletonModel.getInstance().updateKpr(kpr)
         _state.value = KprInputState.Submit
     }
 
-    fun resetState(){
+    private fun calculateFlat() {
+        val totalMonth = _years*12
+        var remainingLoan = _baseLoan - (_baseLoan * _dp / 100)
+        val capitalPay = remainingLoan/totalMonth
+        val interestPay = remainingLoan*(_interest/100)*_years/totalMonth
+        var totalInterest = 0.0
+        val kprItems = mutableListOf<KprItem>()
+        kprItems.add(KprItem(remainingLoan = remainingLoan.roundOffDecimal()))
+        for (i in 0 until  totalMonth) {
+            totalInterest += interestPay
+            remainingLoan -= capitalPay
+            if (remainingLoan < 0F) {
+                remainingLoan = 0.0
+            }
+            kprItems.add(
+                KprItem(
+                    month = (i + 1).toString(),
+                    capital = capitalPay.roundOffDecimal(),
+                    interest = interestPay.roundOffDecimal(),
+                    installments = (capitalPay+interestPay).roundOffDecimal(),
+                    remainingLoan = remainingLoan.roundOffDecimal()
+                )
+            )
+        }
+        kprItems.add(
+            KprItem(
+                "Total",
+                capital = _baseLoan.roundOffDecimal(),
+                interest = totalInterest.roundOffDecimal(),
+                installments = _baseLoan.plus(totalInterest).roundOffDecimal()
+            )
+        )
+        val kpr = Kpr(
+            installmentsType = _kprType,
+            interest = _interest,
+            years = _years,
+            kprItems = kprItems,
+            totalLoan = _baseLoan.roundOffDecimal(),
+            loanToPay = (_baseLoan * (100 - _dp) / 100).roundOffDecimal(),
+            dp = _dp,
+            dpAmount = _dpAmount.value,
+            interestAtPercentage = (totalInterest / _baseLoan * 100).roundOffDecimal(),
+            interestAmount = totalInterest.roundOffDecimal()
+        )
+        SingletonModel.getInstance().updateKpr(kpr)
+        _state.value = KprInputState.Submit
+    }
+
+    fun resetState() {
         viewModelScope.launch {
             _state.value = KprInputState.Idle
+            _baseLoan = 0.0
+            _years = 0
+            _interest = 0.0
+            _dp = 0.0
+            _kprType = KprType.ANUITAS
         }
     }
 
-    fun calculateEfektif() {
-        val pinjamanPokok = 100000000F
-        var sisaPinjaman = pinjamanPokok
-        val tenor = 10
-        val bunga = 10F
-        val angsuran =
-            pinjamanPokok.times(bunga / 100 / 12) / (1F - 1F / (1F + (bunga / 100) / 12).pow(
-                tenor.times(12)
-            ))
-        println("angsuran $angsuran ")
-        for (i in 0 until 10 * 12) {
-            val bungaBayar = sisaPinjaman.times(bunga / 100 / 12)
-            val pokok = angsuran - bungaBayar
-            sisaPinjaman -= pokok
-            if (sisaPinjaman < 0F) {
-                sisaPinjaman = 0F
+    private fun calculateEfektif() {
+        val totalMonth = _years*12
+        var remainingLoan = _baseLoan - (_baseLoan * _dp / 100)
+        val capitalPay = remainingLoan/totalMonth
+        var totalInterest = 0.0
+        val kprItems = mutableListOf<KprItem>()
+        kprItems.add(KprItem(remainingLoan = remainingLoan.roundOffDecimal()))
+        for (i in 0 until  totalMonth) {
+            val interestPay = remainingLoan*_interest/100*30/360
+            totalInterest += interestPay
+            remainingLoan -= capitalPay
+            if (remainingLoan < 0F) {
+                remainingLoan = 0.0
             }
-            println("$i bunga $bungaBayar, pokok $pokok, sisa $sisaPinjaman")
+            kprItems.add(
+                KprItem(
+                    month = (i + 1).toString(),
+                    capital = capitalPay.roundOffDecimal(),
+                    interest = interestPay.roundOffDecimal(),
+                    installments = (capitalPay+ interestPay).roundOffDecimal(),
+                    remainingLoan = remainingLoan.roundOffDecimal()
+                )
+            )
         }
-    }
-
-    fun calculateFlat() {
-        val pinjamanPokok = 100000000F
-        var sisaPinjaman = pinjamanPokok
-        val tenor = 10
-        val bunga = 10F
-        val angsuran =
-            pinjamanPokok.times(bunga / 100 / 12) / (1F - 1F / (1F + (bunga / 100) / 12).pow(
-                tenor.times(12)
-            ))
-        println("angsuran $angsuran ")
-        for (i in 0 until 10 * 12) {
-            val bungaBayar = sisaPinjaman.times(bunga / 100 / 12)
-            val pokok = angsuran - bungaBayar
-            sisaPinjaman -= pokok
-            if (sisaPinjaman < 0F) {
-                sisaPinjaman = 0F
-            }
-            println("$i bunga $bungaBayar, pokok $pokok, sisa $sisaPinjaman")
-        }
+        kprItems.add(
+            KprItem(
+                "Total",
+                capital = _baseLoan.roundOffDecimal(),
+                interest = totalInterest.roundOffDecimal(),
+                installments = _baseLoan.plus(totalInterest).roundOffDecimal()
+            )
+        )
+        val kpr = Kpr(
+            installmentsType = _kprType,
+            interest = _interest,
+            years = _years,
+            kprItems = kprItems,
+            totalLoan = _baseLoan.roundOffDecimal(),
+            loanToPay = (_baseLoan * (100 - _dp) / 100).roundOffDecimal(),
+            dp = _dp,
+            dpAmount = _dpAmount.value,
+            interestAtPercentage = (totalInterest / _baseLoan * 100).roundOffDecimal(),
+            interestAmount = totalInterest.roundOffDecimal()
+        )
+        SingletonModel.getInstance().updateKpr(kpr)
+        _state.value = KprInputState.Submit
     }
 }
