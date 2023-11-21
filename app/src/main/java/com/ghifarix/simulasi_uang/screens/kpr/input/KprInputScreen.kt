@@ -166,8 +166,8 @@ private fun Dp(modifier: Modifier, updateDp: (String) -> Unit = {}) {
         remember {
             mutableStateOf(
                 TextFieldValue(
-                    text = "",
-                    selection = TextRange.Zero
+                    text = "0.0",
+                    selection = TextRange(3)
                 )
             )
         }

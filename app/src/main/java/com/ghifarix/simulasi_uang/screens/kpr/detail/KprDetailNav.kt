@@ -9,6 +9,8 @@ import androidx.navigation.compose.composable
 const val KPR_DETAIL_ROUTE="kpr-detail"
 fun NavGraphBuilder.kprDetailNav(navController: NavController) {
     composable(KPR_DETAIL_ROUTE){
-       KprDetailScreen(hiltViewModel())
+       KprDetailScreen(hiltViewModel(), onBack = {
+           navController.popBackStack()
+       })
     }
 }

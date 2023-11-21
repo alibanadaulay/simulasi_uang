@@ -15,18 +15,24 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.VerticalAlignmentLine
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -38,13 +44,23 @@ import com.ghifarix.simulasi_uang.screens.kpr.model.Kpr
 private const val textDp = 150
 
 @Composable
-fun KprDetailScreen(kprDetailViewModel: KprDetailViewModel) {
+fun KprDetailScreen(kprDetailViewModel: KprDetailViewModel, onBack:() -> Unit={}) {
     LaunchedEffect(key1 = true) {
         kprDetailViewModel.getKpr()
     }
 
     val state = kprDetailViewModel.state.collectAsState().value
-    Scaffold(topBar = { TopAppBar(title = { Text(text = "Detail") }) }) { pads ->
+    Scaffold(topBar = { TopAppBar(title = {
+        Row (verticalAlignment = Alignment.CenterVertically){
+            IconButton(onClick = { onBack() }) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "back from kpr detail"
+                )
+            }
+            Text(text = "Detail Angsuran")
+        }
+    }) }) { pads ->
         when (state) {
             is KprDetailState.LoadKprDetails -> {
                 Column(modifier = Modifier.padding(pads)) {
