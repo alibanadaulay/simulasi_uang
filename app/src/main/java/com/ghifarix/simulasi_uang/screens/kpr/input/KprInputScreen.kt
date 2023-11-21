@@ -20,6 +20,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -333,7 +334,7 @@ private fun KprType(
             shape = RoundedCornerShape(8.dp)
         ) {
             Text(
-                text = KprType.ANUITAS.name, color = Color.Black,
+                text = KprType.ANUITAS.name,
             )
         }
         Spacer(modifier = Modifier.width(2.dp))
@@ -346,12 +347,11 @@ private fun KprType(
                 .weight(1f),
             colors = ButtonDefaults.buttonColors(
                 containerColor = getColor(type = KprType.FLAT, state),
-                contentColor = Color.Gray
             ),
             shape = RoundedCornerShape(8.dp)
         ) {
             Text(
-                text = KprType.FLAT.name, color = Color.Black,
+                text = KprType.FLAT.name,
             )
         }
         Spacer(modifier = Modifier.width(2.dp))
@@ -368,15 +368,17 @@ private fun KprType(
             shape = RoundedCornerShape(8.dp)
         ) {
             Text(
-                text = KprType.EFEKTIF.name, color = Color.Black,
+                text = KprType.EFEKTIF.name,
             )
         }
         Spacer(modifier = Modifier.width(2.dp))
     }
 }
+
+@Composable
 private fun getColor(type: KprType, state: State<KprType>): Color {
     return if (state.value == type) {
-        Color.Red
+        MaterialTheme.colorScheme.primary
     } else Color.White
 }
 
