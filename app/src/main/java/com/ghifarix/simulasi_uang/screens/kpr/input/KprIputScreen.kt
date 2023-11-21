@@ -20,6 +20,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -34,7 +35,20 @@ import java.text.DecimalFormat
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun KprInputScreen(kprInputViewModel: KprInputViewModel, onClickHamburger: () -> Unit = {}) {
+fun KprInputScreen(
+    kprInputViewModel: KprInputViewModel,
+    onClickHamburger: () -> Unit = {},
+    onNavigateToDetail: () -> Unit = {}
+) {
+
+
+    val state = kprInputViewModel.state.collectAsState().value
+
+    if (state is KprInputState.Submit) {
+        onNavigateToDetail()
+        kprInputViewModel.resetState()
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(title = { Text(text = "KPR") },
@@ -50,7 +64,9 @@ fun KprInputScreen(kprInputViewModel: KprInputViewModel, onClickHamburger: () ->
             DpAndYearsLoan(kprInputViewModel::updateDp, kprInputViewModel::updateYears)
             BaseRate(kprInputViewModel::updateRate)
             OutlinedButton(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth(),
                 shape = RectangleShape,
                 onClick = { kprInputViewModel.calculate() }) {
                 Text(text = "Calculate")
@@ -81,10 +97,10 @@ private fun BaseLoan(updateBaseLoan: (String) -> Unit = {}) {
         value = stateValue.value,
         onValueChange = {
             state = true
-            updateBaseLoan(it.text)
-            stateValue.value = it.copy(selection = TextRange(it.text.length))
+//            updateBaseLoan(it.text)
+//            stateValue.value = it.copy(selection = TextRange(it.text.length))
             with(it) {
-                if (text.length > 12) {
+                if (text.length > 15) {
                     return@OutlinedTextField
                 }
                 if (text.isEmpty()) {
@@ -141,7 +157,7 @@ private fun BaseRate(updateRate: (String) -> Unit = {}) {
             .padding(all = 8.dp)
             .fillMaxWidth(),
         label = {
-            Text(text = "Bunga (Riba) %", fontSize = 10.sp)
+            Text(text = "Bunga (Riba)", fontSize = 10.sp)
         },
         value = stateValue.value,
         onValueChange = {
@@ -224,7 +240,7 @@ private fun DpAndYearsLoan(updateDp: (String) -> Unit = {}, updateYearLoan: (Str
                 .padding(all = 8.dp)
                 .weight(1f),
             label = {
-                Text(text = "Lama Pinjaman (Tahun)", fontSize = 10.sp)
+                Text(text = "Lama Pinjaman (Tahun)", fontSize = 10.sp, maxLines = 1)
             },
             value = yearsStateValue.value,
             onValueChange = {
