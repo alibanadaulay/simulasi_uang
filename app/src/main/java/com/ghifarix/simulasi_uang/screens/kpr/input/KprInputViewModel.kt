@@ -6,6 +6,7 @@ import com.ghifarix.simulasi_uang.SingletonModel
 import com.ghifarix.simulasi_uang.extensions.roundOffDecimal
 import com.ghifarix.simulasi_uang.screens.kpr.model.Kpr
 import com.ghifarix.simulasi_uang.screens.kpr.model.KprItem
+import com.ghifarix.simulasi_uang.screens.kpr.model.KprType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,12 +17,15 @@ import kotlin.math.pow
 
 @HiltViewModel
 class KprInputViewModel @Inject constructor() : ViewModel() {
+    private var _kprType:KprType = KprType.ANUITAS
     private var _baseLoan = 0.0
-    private var _dp = 0L
     private var _years = 0
     private var _interest = 0.0
+    private var _dp = 0.0
     private val _state: MutableStateFlow<KprInputState> = MutableStateFlow(KprInputState.Idle)
     val state: StateFlow<KprInputState> = _state
+    private val _dpAmount: MutableStateFlow<String> = MutableStateFlow("0.0")
+    val dpAmount:StateFlow<String> = _dpAmount
 
     fun updateBaseLoan(loan: String) {
         viewModelScope.launch {
@@ -30,18 +34,28 @@ class KprInputViewModel @Inject constructor() : ViewModel() {
             } else {
                 loan.replace(",", "").toDouble()
             }
+            calculateDp()
+        }
+    }
+
+    fun updateKprType(kprType: KprType) {
+        viewModelScope.launch {
+            _kprType = kprType
         }
     }
 
     fun updateDp(dp: String) {
         viewModelScope.launch {
             _dp = if (dp.isNullOrBlank()) {
-                0L
+                0.0
             } else {
-                dp.toLong()
+                dp.replace(",", "").toDouble()
             }
+            calculateDp()
         }
     }
+
+
 
     fun updateYears(years: String) {
         viewModelScope.launch {
@@ -65,34 +79,45 @@ class KprInputViewModel @Inject constructor() : ViewModel() {
 
     fun calculate() {
         viewModelScope.launch {
-            calculateAnuitas()
+            when(_kprType){
+                KprType.ANUITAS -> {
+                    calculateAnuitas()
+                }
+                KprType.EFEKTIF -> {
+                    _dpAmount.value = "100"
+                }
+                KprType.FLAT -> {
+                    _dpAmount.value = "100.00"
+                }
+            }
         }
     }
 
-    private suspend fun calculateAnuitas() {
-        var remainingLoan = _baseLoan
-        val interest = _interest.toDouble()
+    private fun calculateDp(){
+        _dpAmount.value = (_baseLoan * _dp /100).roundOffDecimal()
+    }
+    private fun calculateAnuitas() {
+        var remainingLoan = _baseLoan - (_baseLoan * _dp /100)
+        val interest = _interest
         val installments =
-            _baseLoan.times(interest / 100 / 12) / (1.0 - 1.0 / (1.0 + (interest / 100) / 12).pow(
+            remainingLoan.times(interest / 100 / 12) / (1.0 - 1.0 / (1.0 + (interest / 100) / 12).pow(
                 _years.times(12)
             ))
-        var totalCapital = 0.0
         var totalInterest = 0.0
         val kprItems = mutableListOf<KprItem>()
-        kprItems.add(KprItem(remainingLoan = _baseLoan.roundOffDecimal()))
+        kprItems.add(KprItem(remainingLoan = remainingLoan.roundOffDecimal()))
 
         for (i in 0 until 10 * 12) {
             val interestPay = remainingLoan.times(interest / 100 / 12)
             val capitalPay = installments - interestPay
             totalInterest += interestPay
-            totalCapital += capitalPay
             remainingLoan -= capitalPay
             if (remainingLoan < 0F) {
                 remainingLoan = 0.0
             }
             kprItems.add(
                 KprItem(
-                    month = i + 1,
+                    month = (i + 1).toString(),
                     capital = capitalPay.roundOffDecimal(),
                     interest = interestPay.roundOffDecimal(),
                     installments = installments.roundOffDecimal(),
@@ -100,14 +125,18 @@ class KprInputViewModel @Inject constructor() : ViewModel() {
                 )
             )
         }
+        kprItems.add(KprItem("Total", capital = _baseLoan.roundOffDecimal(), interest = totalInterest.roundOffDecimal(), installments = _baseLoan.plus(totalInterest).roundOffDecimal()))
         val kpr = Kpr(
+            installmentsType = _kprType,
             interest = _interest,
             years = _years,
             kprItems = kprItems,
-            totalCapital = totalCapital.roundOffDecimal(),
-            totalInterest = totalInterest.roundOffDecimal(),
             totalLoan = _baseLoan.roundOffDecimal(),
-            totalInstallments = totalInterest.plus(totalCapital).roundOffDecimal()
+            loanToPay =  (_baseLoan * (100 -_dp) /100).roundOffDecimal(),
+            dp = _dp,
+            dpAmount = _dpAmount.value,
+            interestAtPercentage = (totalInterest/_baseLoan*100).roundOffDecimal(),
+            interestAmount = totalInterest.roundOffDecimal()
         )
         SingletonModel.getInstance().updateKpr(kpr)
         _state.value = KprInputState.Submit

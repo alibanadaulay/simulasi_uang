@@ -9,8 +9,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -25,13 +25,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.ghifarix.simulasi_uang.screens.kpr.model.Kpr
 
-private const val TextDp = 140
+private const val textDp = 150
 
 @Composable
 fun KprDetailScreen(kprDetailViewModel: KprDetailViewModel) {
@@ -62,18 +66,19 @@ private fun ShowList(kpr: Kpr) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight()
+            .heightIn(min = 100.dp, LocalConfiguration.current.screenHeightDp.dp * 4 / 5)
             .horizontalScroll(state = rememberScrollState())
-            .padding(all = 8.dp)
     ) {
         Row (
             Modifier
                 .padding(bottom = 8.dp)
-                .background(Color.Blue)){
+                .background(Color.Blue)
+                .padding(4.dp)){
             Text(
                 text = "Bulan",
-                modifier = Modifier.width(48.dp),
-                textAlign = TextAlign.Center
+                modifier = Modifier.width(64.dp),
+                textAlign = TextAlign.Center,
+                fontSize = 20.sp
             )
             Spacer(modifier = Modifier.width(10.dp))
             TitleText(text = "Bunga")
@@ -87,84 +92,57 @@ private fun ShowList(kpr: Kpr) {
         LazyColumn(content = {
             items(kpr.kprItems.size) {
                 val item = kpr.kprItems[it]
-                Column {
+                val isLast =it == kpr.kprItems.size -1
+                Column (modifier = Modifier
+                    .padding(all = 8.dp)){
                     Row(horizontalArrangement = Arrangement.SpaceEvenly) {
                         Text(
-                            text = "${item.month}",
-                            modifier = Modifier.width(48.dp),
+                            text = item.month,
+                            modifier = Modifier.width(64.dp),
                             fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Center
                         )
                         Spacer(modifier = Modifier.width(10.dp))
-                        Text(
-                            modifier = Modifier.width(TextDp.dp),
-                            text = item.interest,
-                            fontWeight = FontWeight.Bold,
-                            textAlign = TextAlign.Center
-                        )
+                        DetailLoanItemText(text = item.interest, isLast = isLast)
                         Spacer(modifier = Modifier.width(10.dp))
-                        Text(
-                            modifier = Modifier.width(TextDp.dp),
-                            text = item.capital,
-                            fontWeight = FontWeight.Bold,
-                            textAlign = TextAlign.Center
-                        )
+                        DetailLoanItemText(text = item.capital, isLast = isLast)
                         Spacer(modifier = Modifier.width(10.dp))
-                        Text(
-                            modifier = Modifier.width(TextDp.dp),
-                            text = item.installments,
-                            fontWeight = FontWeight.Bold,
-                            textAlign = TextAlign.Center
-                        )
+                        DetailLoanItemText(item.installments, isLast = isLast)
                         Spacer(modifier = Modifier.width(10.dp))
-                        Text(
-                            modifier = Modifier.width(TextDp.dp),
-                            text = item.remainingLoan,
-                            fontWeight = FontWeight.Bold,
-                            textAlign = TextAlign.Center
-                        )
+                        DetailLoanItemText(item.remainingLoan, isLast = isLast)
                     }
                 }
             }
         })
-        Row {
-            Text(
-                text = "Total",
-                modifier = Modifier.width(48.dp),
-                textAlign = TextAlign.Center
-            )
-            Spacer(modifier = Modifier.width(10.dp))
-            TitleText(text = kpr.totalInterest)
-            Spacer(modifier = Modifier.width(10.dp))
-            TitleText(text = kpr.totalCapital)
-            Spacer(modifier = Modifier.width(10.dp))
-            TitleText(text = kpr.totalInstallments)
-            Spacer(modifier = Modifier.width(10.dp))
-            TitleText(text = "--")
-        }
     }
 }
 
 @Composable
-private fun ShowDetail(kpr: Kpr) {
+private fun ShowDetail(kpr: Kpr = Kpr()) {
     Card(
         modifier = Modifier
+            .padding(all = 8.dp)
             .fillMaxWidth()
-            .padding(all = 8.dp),
+            .shadow(1.dp),
         colors = CardDefaults.outlinedCardColors(),
         border = BorderStroke(1.dp, color = Color.Gray)
     ) {
         DetailLoanText(
             title = "Jenis Angsuran", text = kpr
-                .installmentsType
+                .installmentsType.name
         )
-        DetailLoanText(title = "Pinjaman Pokok", text = "Rp ${kpr.totalLoan}")
+        DetailLoanText(title = "Pinjaman", text = "Rp ${kpr.totalLoan}")
+        DetailLoanText(title = "DP (${kpr.dp}%)", text = "Rp ${kpr.dpAmount}")
+        DetailLoanText(title = "Pinjaman Dibayar", text = "Rp ${kpr.loanToPay}")
         DetailLoanText(
-            title = "Lama Pinjaman (Tahun)", text = kpr
-                .years.toString()
+            title = "Bunga (Riba)", text = "${kpr.interest}%"
         )
         DetailLoanText(
-            title = "Bunga (Riba)", text = kpr.interest.toString()
+                title = "Lama Pinjaman (Tahun)", text = kpr
+        .years.toString()
+        )
+        DetailLoanText(
+            title = "Pertambahan (${kpr.interestAtPercentage}%)", text = "Rp ${kpr.interestAmount}"
         )
     }
 }
@@ -174,20 +152,39 @@ private fun DetailLoanText(title: String, text: String) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 8.dp, end = 8.dp, top=2.dp, bottom = 2.dp)
+            .padding(start = 8.dp, end = 8.dp, top = 2.dp, bottom = 2.dp)
     ) {
-        Text(text = title, fontWeight = FontWeight.SemiBold)
+        Text(text = title, fontWeight = FontWeight.Normal, fontSize = 16.sp)
         Spacer(modifier = Modifier.weight(1f))
-        Text(text = text, fontWeight = FontWeight.Bold)
+        Text(text = text, fontWeight = FontWeight.Bold, fontSize = 18.sp)
     }
+}
+
+@Composable
+private fun DetailLoanItemText(text: String, isLast:Boolean){
+    val fontWeight = if (isLast) FontWeight.Bold else FontWeight.Light
+    Text(
+        modifier = Modifier.width(textDp.dp),
+        text = text,
+        fontWeight = fontWeight,
+        textAlign = TextAlign.Center,
+        fontSize = 16.sp
+    )
 }
 
 @Composable
 private fun TitleText(text: String) {
     Text(
         text = text,
-        modifier = Modifier.width(TextDp.dp),
+        modifier = Modifier.width(textDp.dp),
         fontWeight = FontWeight.Bold,
-        textAlign = TextAlign.Center
+        textAlign = TextAlign.Center,
+        fontSize = 20.sp
     )
+}
+
+@Composable
+@Preview
+fun ShowDetailPreview (){
+    ShowDetail()
 }

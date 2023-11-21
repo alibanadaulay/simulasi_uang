@@ -32,6 +32,7 @@ class MainActivity : ComponentActivity() {
             val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
             ModalNavigationDrawer(
                 drawerState = drawerState,
+                gesturesEnabled = false,
                 drawerContent = {
                     ModalDrawerSheet {
                         Text("Drawer title", modifier = Modifier.padding(16.dp))
