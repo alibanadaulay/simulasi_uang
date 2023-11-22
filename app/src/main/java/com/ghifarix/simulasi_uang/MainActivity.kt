@@ -31,6 +31,8 @@ import androidx.navigation.compose.rememberNavController
 import com.ghifarix.simulasi_uang.screens.kpr.detail.kprDetailNav
 import com.ghifarix.simulasi_uang.screens.kpr.input.KPR_INPUT_ROUTE
 import com.ghifarix.simulasi_uang.screens.kpr.input.kprInputNav
+import com.ghifarix.simulasi_uang.screens.pinjol.create.PINJOL_CREATE_ROUTE
+import com.ghifarix.simulasi_uang.screens.pinjol.create.pinjolCreateNav
 import com.ghifarix.simulasi_uang.theme.DarkColorPalette
 import com.ghifarix.simulasi_uang.theme.LightColorPalette
 import dagger.hilt.android.AndroidEntryPoint
@@ -98,23 +100,25 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                             NavigationDrawerItem(
-                                label = { Text(text = "Leasing") },
+                                label = { Text(text = "Pinjol") },
                                 selected = false,
-                                onClick = { /*TODO*/ }
+                                onClick = {
+                                    scope.launch {
+                                        drawerState.close()
+                                    }
+                                    navController.navigate(PINJOL_CREATE_ROUTE)
+                                }
                             )
                         }
                     }) {
                     NavHost(navController = navController, startDestination = KPR_INPUT_ROUTE) {
                         kprInputNav(navController = navController, drawerState = drawerState)
                         kprDetailNav(navController = navController)
+                        pinjolCreateNav(navController = navController, drawerState = drawerState)
                     }
                 }
             }
         }
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
     }
 }
 

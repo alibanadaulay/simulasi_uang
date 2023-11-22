@@ -109,7 +109,7 @@ class KprInputViewModel @Inject constructor() : ViewModel() {
         val kprItems = mutableListOf<KprItem>()
         kprItems.add(KprItem(remainingLoan = remainingLoan.roundOffDecimal()))
 
-        for (i in 0 until 10 * 12) {
+        for (i in 0 until _years * 12) {
             val interestPay = remainingLoan.times(interest / 100 / 12)
             val capitalPay = installments - interestPay
             totalInterest += interestPay
