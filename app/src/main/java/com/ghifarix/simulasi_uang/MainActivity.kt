@@ -3,6 +3,7 @@ package com.ghifarix.simulasi_uang
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Row
@@ -47,10 +48,20 @@ class MainActivity : ComponentActivity() {
             } else {
                 LightColorPalette
             }
+
             MaterialTheme(colorScheme = colors) {
                 val navController = rememberNavController()
                 val scope = rememberCoroutineScope()
                 val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+                BackHandler {
+                    scope.launch {
+                        if (drawerState.isOpen) {
+                            drawerState.close()
+                        } else {
+                            navController.popBackStack()
+                        }
+                    }
+                }
                 ModalNavigationDrawer(
                     drawerState = drawerState,
                     gesturesEnabled = false,
@@ -100,6 +111,10 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
     }
 }
 
