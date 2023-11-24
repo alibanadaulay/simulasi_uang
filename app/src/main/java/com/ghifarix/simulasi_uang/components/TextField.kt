@@ -104,6 +104,7 @@ fun TextFieldCustom(
     onTextChanged: (String) -> Unit = {},
     icon: ImageVector = Icons.Default.Percent,
     label: String = "",
+    maxInterest: Double? = null
 ) {
     var isOnchange = false
     OutlinedTextField(
@@ -114,12 +115,21 @@ fun TextFieldCustom(
         readOnly = readOnly,
         value = state.value,
         onValueChange = {
-            if (it.text.length > 5) {
+            var currentText = it.text
+            if (currentText.length > 5) {
                 return@OutlinedTextField
             }
+            maxInterest?.let { max ->
+                if (currentText.isNotEmpty() && max < currentText.toDouble()) {
+                    currentText = maxInterest.toString()
+                }
+            }
             isOnchange = true
-            state.value = it.copy(selection = TextRange(it.text.length))
-            onTextChanged(it.text)
+            state.value = it.copy(
+                selection = TextRange(currentText.length),
+                text = currentText
+            )
+            onTextChanged(currentText)
         },
         isError = state.value.text.length < 5 && isOnchange,
         singleLine = true,

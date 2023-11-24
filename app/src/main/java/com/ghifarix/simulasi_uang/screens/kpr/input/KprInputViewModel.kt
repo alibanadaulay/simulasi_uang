@@ -3,6 +3,7 @@ package com.ghifarix.simulasi_uang.screens.kpr.input
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ghifarix.simulasi_uang.SingletonModel
+import com.ghifarix.simulasi_uang.extensions.convertToInt
 import com.ghifarix.simulasi_uang.extensions.roundOffDecimal
 import com.ghifarix.simulasi_uang.screens.kpr.model.Kpr
 import com.ghifarix.simulasi_uang.screens.kpr.model.KprItem
@@ -61,7 +62,7 @@ class KprInputViewModel @Inject constructor() : ViewModel() {
             _years = if (years.isBlank()) {
                 0
             } else {
-                years.toInt()
+                years.convertToInt()
             }
         }
     }

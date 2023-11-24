@@ -2,22 +2,31 @@ package com.ghifarix.simulasi_uang.screens.pinjol.create
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ghifarix.simulasi_uang.extensions.convertToInt
 import com.ghifarix.simulasi_uang.screens.pinjol.model.PinjolType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class PinjolCreateViewModel @Inject constructor() : ViewModel() {
-    private var _pinjolType = PinjolType.Harian
-    private var _serviceCost: String = "0.0"
     private var _serviceCostInterest: Double = 0.0
     private var _interest: Double = 0.0
     private var _baseLoan: Double = 0.0
+    private var _loanTime: Int = 0
+    private val _state: MutableStateFlow<PinjolCreateState> =
+        MutableStateFlow(PinjolCreateState.Idle)
+    val state: StateFlow<PinjolCreateState> = _state
+    private val _serviceCost: MutableStateFlow<String> = MutableStateFlow("0.0")
+    val serviceCost: StateFlow<String> = _serviceCost
+    private val _pinjolType: MutableStateFlow<PinjolType> = MutableStateFlow(PinjolType.Harian)
+    val pinjolType: StateFlow<PinjolType> = _pinjolType
 
     fun updatePinjolType(pinjolType: PinjolType) {
         viewModelScope.launch {
-            _pinjolType = pinjolType
+            _pinjolType.value = pinjolType
         }
     }
 
@@ -51,14 +60,26 @@ class PinjolCreateViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun submit() {
-        when (_pinjolType) {
-            PinjolType.Harian -> {
-
+    fun updateLoanTime(loan: String) {
+        viewModelScope.launch {
+            _loanTime = if (loan.isBlank()) {
+                0
+            } else {
+                loan.convertToInt()
             }
+        }
+    }
 
-            PinjolType.Bulanan -> {
+    fun submit() {
+        viewModelScope.launch {
+            when (_pinjolType.value) {
+                PinjolType.Harian -> {
 
+                }
+
+                PinjolType.Bulanan -> {
+
+                }
             }
         }
     }

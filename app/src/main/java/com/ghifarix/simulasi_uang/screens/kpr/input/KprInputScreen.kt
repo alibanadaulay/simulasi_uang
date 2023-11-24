@@ -30,10 +30,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ghifarix.simulasi_uang.components.BaseLoan
+import com.ghifarix.simulasi_uang.components.SubmitButton
 import com.ghifarix.simulasi_uang.components.TextFieldCustom
 import com.ghifarix.simulasi_uang.components.TextFieldDisplay
 import com.ghifarix.simulasi_uang.screens.kpr.model.KprType
@@ -100,17 +100,14 @@ fun KprInputScreen(
                 )
             }
             KprType(onClickType = kprInputViewModel::updateKprType)
-            OutlinedButton(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .fillMaxWidth(),
-                shape = RectangleShape,
-                onClick = { kprInputViewModel.calculate() }) {
-                Text(text = "Hitung")
-            }
+            SubmitButton(
+                onClick = kprInputViewModel::calculate,
+                text = "Hitung"
+            )
         }
     }
 }
+
 @Composable
 private fun KprType(
     initialValue: KprType = KprType.ANUITAS,
