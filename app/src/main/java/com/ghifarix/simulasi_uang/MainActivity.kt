@@ -36,6 +36,7 @@ import com.ghifarix.simulasi_uang.screens.pinjol.create.pinjolCreateNav
 import com.ghifarix.simulasi_uang.screens.pinjol.detail.pinjolDetailNav
 import com.ghifarix.simulasi_uang.theme.DarkColorPalette
 import com.ghifarix.simulasi_uang.theme.LightColorPalette
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -45,6 +46,7 @@ class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        FirebaseCrashlytics.getInstance().sendUnsentReports()
         setContent {
             val colors = if (isSystemInDarkTheme()) {
                 DarkColorPalette

@@ -1,6 +1,7 @@
 *.iml
 .gradle
 /.idea/codeStyles/
+/.idea/inspectionProfiles/Project_Default.xml
 /.idea/modules/
 /.idea/shelf/
 /.idea/sonarlint/
