@@ -10,13 +10,18 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class KprDetailViewModel @Inject constructor(): ViewModel() {
-    private val _state =MutableStateFlow<KprDetailState>(KprDetailState.Idle)
-    val state : StateFlow<KprDetailState> = _state
+class KprDetailViewModel @Inject constructor() : ViewModel() {
+    private val _state = MutableStateFlow<KprDetailState>(KprDetailState.Idle)
+    val state: StateFlow<KprDetailState> = _state
 
-    fun getKpr(){
+    fun getKpr() {
         viewModelScope.launch {
-            _state.value = KprDetailState.LoadKprDetails(SingletonModel.getInstance().getKpr()?: throw NullPointerException() )
+            val kpr = SingletonModel.getInstance().getKpr()
+            if (kpr != null) {
+                _state.value = KprDetailState.LoadKprDetails(
+                    kpr = kpr
+                )
+            }
         }
     }
 }

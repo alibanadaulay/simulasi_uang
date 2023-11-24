@@ -6,7 +6,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.ghifarix.simulasi_uang.screens.kpr.detail.KPR_DETAIL_ROUTE
+import com.ghifarix.simulasi_uang.screens.pinjol.detail.PINJOL_DETAIL_ROUTE
 import kotlinx.coroutines.launch
 
 const val PINJOL_CREATE_ROUTE = "pinjol-create"
@@ -21,7 +21,7 @@ fun NavGraphBuilder.pinjolCreateNav(navController: NavController, drawerState: D
             },
             onNavigateToDetail = {
                 scope.launch {
-                    navController.navigate(KPR_DETAIL_ROUTE)
+                    navController.navigate(PINJOL_DETAIL_ROUTE)
                 }
             })
     }

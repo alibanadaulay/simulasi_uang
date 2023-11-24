@@ -90,6 +90,7 @@ fun BaseLoan(
 
 @Composable
 fun TextFieldCustom(
+    maxLength: Int = 5,
     modifier: Modifier = Modifier,
     state: MutableState<TextFieldValue> =
         remember {

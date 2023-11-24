@@ -1,6 +1,5 @@
 package com.ghifarix.simulasi_uang.screens.kpr.model
 
-import androidx.compose.ui.unit.Dp
 
 data class Kpr(
     val kprItems: List<KprItem> = ArrayList(),

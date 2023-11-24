@@ -49,9 +49,15 @@ fun PinjolCreateScreen(
     val dpAmount = pinjolCreateViewModel.serviceCost.collectAsState().value
     val pinjolType = pinjolCreateViewModel.pinjolType.collectAsState().value
 
+    if (state is PinjolCreateState.Submit) {
+        onNavigateToDetail()
+        pinjolCreateViewModel.resetState()
+    }
+
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text(text = "Pinjol") },
+            TopAppBar(
+                title = { Text(text = "Pinjol") },
                 navigationIcon = {
                     IconButton(onClick = { onClickHamburger() }) {
                         Icon(
@@ -88,6 +94,7 @@ fun PinjolCreateScreen(
                         .padding(all = 8.dp)
                         .weight(0.3f)
                         .fillMaxWidth(),
+                    maxLength = 3,
                     label = "Lama Pinjaman",
                     icon = Icons.Default.CalendarToday,
                     onTextChanged = pinjolCreateViewModel::updateLoanTime

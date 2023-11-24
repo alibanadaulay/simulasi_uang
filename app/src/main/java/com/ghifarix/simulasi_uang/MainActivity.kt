@@ -33,6 +33,7 @@ import com.ghifarix.simulasi_uang.screens.kpr.input.KPR_INPUT_ROUTE
 import com.ghifarix.simulasi_uang.screens.kpr.input.kprInputNav
 import com.ghifarix.simulasi_uang.screens.pinjol.create.PINJOL_CREATE_ROUTE
 import com.ghifarix.simulasi_uang.screens.pinjol.create.pinjolCreateNav
+import com.ghifarix.simulasi_uang.screens.pinjol.detail.pinjolDetailNav
 import com.ghifarix.simulasi_uang.theme.DarkColorPalette
 import com.ghifarix.simulasi_uang.theme.LightColorPalette
 import dagger.hilt.android.AndroidEntryPoint
@@ -115,6 +116,7 @@ class MainActivity : ComponentActivity() {
                         kprInputNav(navController = navController, drawerState = drawerState)
                         kprDetailNav(navController = navController)
                         pinjolCreateNav(navController = navController, drawerState = drawerState)
+                        pinjolDetailNav(navController = navController)
                     }
                 }
             }
