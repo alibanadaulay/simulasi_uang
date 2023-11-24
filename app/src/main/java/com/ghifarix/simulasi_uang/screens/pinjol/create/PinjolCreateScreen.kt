@@ -32,6 +32,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.ghifarix.simulasi_uang.components.BannerAds
 import com.ghifarix.simulasi_uang.components.BaseLoan
 import com.ghifarix.simulasi_uang.components.SubmitButton
 import com.ghifarix.simulasi_uang.components.TextFieldCustom
@@ -127,6 +128,8 @@ fun PinjolCreateScreen(
                 onClick = pinjolCreateViewModel::submit,
                 text = "Hitung"
             )
+            Spacer(modifier = Modifier.weight(1f))
+            BannerAds()
         }
     }
 }

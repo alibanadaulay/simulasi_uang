@@ -36,6 +36,8 @@ import com.ghifarix.simulasi_uang.screens.pinjol.create.pinjolCreateNav
 import com.ghifarix.simulasi_uang.screens.pinjol.detail.pinjolDetailNav
 import com.ghifarix.simulasi_uang.theme.DarkColorPalette
 import com.ghifarix.simulasi_uang.theme.LightColorPalette
+import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.RequestConfiguration
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -47,6 +49,13 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         FirebaseCrashlytics.getInstance().sendUnsentReports()
+        MobileAds.initialize(this) {
+
+        }
+        MobileAds.setRequestConfiguration(
+            RequestConfiguration.Builder()
+                .setTestDeviceIds(listOf("f508ccf1-11f9-418a-b550-1a873e393473")).build()
+        )
         setContent {
             val colors = if (isSystemInDarkTheme()) {
                 DarkColorPalette
