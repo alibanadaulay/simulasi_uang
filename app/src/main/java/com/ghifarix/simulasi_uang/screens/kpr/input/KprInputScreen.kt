@@ -105,6 +105,7 @@ fun KprInputScreen(
                 onClick = kprInputViewModel::calculate,
                 text = "Hitung"
             )
+            Spacer(modifier = Modifier.weight(1f))
             BannerAds()
         }
     }

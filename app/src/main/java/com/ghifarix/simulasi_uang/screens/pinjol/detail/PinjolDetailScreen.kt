@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Download
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -60,6 +61,15 @@ fun PinjolDetailScreen(kprDetailViewModel: PinjolDetailViewModel, onBack: () -> 
                     )
                 }
                 Text(text = "Detail Angsuran")
+                Spacer(modifier = Modifier.weight(1f))
+                IconButton(onClick = {
+
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.Download,
+                        contentDescription = "download pinjol"
+                    )
+                }
             }
         })
     }) { pads ->

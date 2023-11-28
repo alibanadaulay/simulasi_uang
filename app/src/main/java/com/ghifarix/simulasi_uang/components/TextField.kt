@@ -82,7 +82,7 @@ fun BaseLoan(
         isError = stateValue.value.text.length < 4 && state,
         singleLine = true,
         maxLines = 0,
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
         placeholder = {
             Text(text = "")
         })

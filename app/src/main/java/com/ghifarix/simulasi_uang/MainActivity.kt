@@ -54,7 +54,7 @@ class MainActivity : ComponentActivity() {
         }
         MobileAds.setRequestConfiguration(
             RequestConfiguration.Builder()
-                .setTestDeviceIds(listOf("f508ccf1-11f9-418a-b550-1a873e393473")).build()
+                .setTestDeviceIds(listOf("DEA094EDC8B0273C228B7F0C51A01283")).build()
         )
         setContent {
             val colors = if (isSystemInDarkTheme()) {
