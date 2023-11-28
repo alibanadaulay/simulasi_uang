@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ghifarix.simulasi_uang.SingletonModel
 import com.ghifarix.simulasi_uang.extensions.convertToInt
+import com.ghifarix.simulasi_uang.extensions.convertToPoint
 import com.ghifarix.simulasi_uang.extensions.roundOffDecimal
 import com.ghifarix.simulasi_uang.screens.kpr.model.Kpr
 import com.ghifarix.simulasi_uang.screens.kpr.model.KprItem
@@ -72,7 +73,7 @@ class KprInputViewModel @Inject constructor() : ViewModel() {
             _interest = if (rate.isBlank()) {
                 0.0
             } else {
-                rate.toDouble()
+                rate.convertToPoint()
             }
         }
     }

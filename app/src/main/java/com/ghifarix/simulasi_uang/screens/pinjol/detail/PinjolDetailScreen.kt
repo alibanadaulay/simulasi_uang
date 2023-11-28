@@ -1,4 +1,7 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
+@file:OptIn(
+    ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class,
+    ExperimentalMaterial3Api::class
+)
 
 package com.ghifarix.simulasi_uang.screens.pinjol.detail
 
@@ -34,11 +37,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.ghifarix.simulasi_uang.SingletonModel
+import com.ghifarix.simulasi_uang.extensions.generatePdf
 import com.ghifarix.simulasi_uang.screens.pinjol.model.Pinjol
 import com.ghifarix.simulasi_uang.screens.pinjol.model.PinjolType
 
@@ -51,6 +57,7 @@ fun PinjolDetailScreen(kprDetailViewModel: PinjolDetailViewModel, onBack: () -> 
     }
 
     val state = kprDetailViewModel.state.collectAsState().value
+    val context = LocalContext.current
     Scaffold(topBar = {
         TopAppBar(title = {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -63,7 +70,9 @@ fun PinjolDetailScreen(kprDetailViewModel: PinjolDetailViewModel, onBack: () -> 
                 Text(text = "Detail Angsuran")
                 Spacer(modifier = Modifier.weight(1f))
                 IconButton(onClick = {
-
+                    context.generatePdf(
+                        pdf = SingletonModel.getInstance().getPdfByPinjol()
+                    )
                 }) {
                     Icon(
                         imageVector = Icons.Default.Download,

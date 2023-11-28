@@ -34,11 +34,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.ghifarix.simulasi_uang.SingletonModel
+import com.ghifarix.simulasi_uang.extensions.generatePdf
 import com.ghifarix.simulasi_uang.screens.kpr.model.Kpr
 
 private const val textDp = 150
@@ -50,6 +53,7 @@ fun KprDetailScreen(kprDetailViewModel: KprDetailViewModel, onBack:() -> Unit={}
     }
 
     val state = kprDetailViewModel.state.collectAsState().value
+    val context = LocalContext.current
     Scaffold(topBar = { TopAppBar(title = {
         Row (verticalAlignment = Alignment.CenterVertically){
             IconButton(onClick = { onBack() }) {
@@ -61,7 +65,7 @@ fun KprDetailScreen(kprDetailViewModel: KprDetailViewModel, onBack:() -> Unit={}
             Text(text = "Detail Angsuran")
             Spacer(modifier = Modifier.weight(1f))
             IconButton(onClick = {
-
+                context.generatePdf(pdf = SingletonModel.getInstance().getPdfByKpr())
             }) {
                 Icon(
                     imageVector = Icons.Default.Download,

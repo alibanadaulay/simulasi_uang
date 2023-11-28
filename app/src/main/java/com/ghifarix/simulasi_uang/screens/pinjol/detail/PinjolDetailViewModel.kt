@@ -1,5 +1,6 @@
 package com.ghifarix.simulasi_uang.screens.pinjol.detail
 
+import android.graphics.Bitmap
 import android.graphics.pdf.PdfDocument
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -29,7 +30,12 @@ class PinjolDetailViewModel @Inject constructor() : ViewModel() {
     }
 
     fun generatePdf() {
-        val pdfDocument = PdfDocument()
-
+        viewModelScope.launch {
+            val pdfDocument = PdfDocument()
+            var pageHeight = 1120
+            var pageWidth = 792
+            lateinit var bmp: Bitmap
+            lateinit var scaledbmp: Bitmap
+        }
     }
 }

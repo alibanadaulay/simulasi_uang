@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.ghifarix.simulasi_uang.SingletonModel
 import com.ghifarix.simulasi_uang.extensions.convertToDouble
 import com.ghifarix.simulasi_uang.extensions.convertToInt
+import com.ghifarix.simulasi_uang.extensions.convertToPoint
 import com.ghifarix.simulasi_uang.extensions.roundOffDecimal
 import com.ghifarix.simulasi_uang.screens.pinjol.model.Pinjol
 import com.ghifarix.simulasi_uang.screens.pinjol.model.PinjolItem
@@ -51,7 +52,7 @@ class PinjolCreateViewModel @Inject constructor() : ViewModel() {
             _interest = if (interest.isBlank()) {
                 0.0
             } else {
-                interest.toDouble()
+                interest.convertToPoint()
             }
         }
     }

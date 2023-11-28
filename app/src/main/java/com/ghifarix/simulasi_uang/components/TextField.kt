@@ -53,8 +53,8 @@ fun BaseLoan(
                 }
                 if (text.isEmpty()) {
                     stateValue.value = copy(
-                        text = "-1",
-                        selection = TextRange(0)
+                        text = "",
+                        selection = TextRange.Zero
                     )
                     return@OutlinedTextField
                 }
