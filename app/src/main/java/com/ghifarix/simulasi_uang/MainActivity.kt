@@ -1,6 +1,5 @@
 package com.ghifarix.simulasi_uang
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
@@ -38,31 +37,27 @@ import com.ghifarix.simulasi_uang.theme.DarkColorPalette
 import com.ghifarix.simulasi_uang.theme.LightColorPalette
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        FirebaseCrashlytics.getInstance().sendUnsentReports()
-        MobileAds.initialize(this) {
-
-        }
+        MobileAds.initialize(this) {}
         MobileAds.setRequestConfiguration(
             RequestConfiguration.Builder()
-                .setTestDeviceIds(listOf("DEA094EDC8B0273C228B7F0C51A01283")).build()
+                .setTestDeviceIds(listOf("FE3D232A299C3A41B61491040D192DD9")).build()
         )
+        super.onCreate(savedInstanceState)
+//        FirebaseCrashlytics.getInstance().sendUnsentReports()
         setContent {
             val colors = if (isSystemInDarkTheme()) {
                 DarkColorPalette
             } else {
                 LightColorPalette
             }
-
+//
             MaterialTheme(colorScheme = colors) {
                 val navController = rememberNavController()
                 val scope = rememberCoroutineScope()
@@ -131,6 +126,31 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
+
+//                Surface(
+//                    modifier = Modifier.fillMaxSize(),
+//                ) {
+//                    Column(
+//                        modifier = Modifier.fillMaxSize(),
+//                        horizontalAlignment = Alignment.CenterHorizontally,
+//                        verticalArrangement = Arrangement.Center
+//                    ) {
+//                        Text(
+//                            text = "Sampple",
+//                            fontWeight = FontWeight.Bold
+//                        )
+//
+//                        Spacer(modifier = Modifier.height(20.dp))
+//
+//                        Row(
+//                            modifier = Modifier.fillMaxWidth(),
+//                            horizontalArrangement = Arrangement.Center
+//                        ) {
+//                            BannerAdsView()
+////                            BannerAdView()
+//                        }
+//                    }
+//                }
         }
     }
 }

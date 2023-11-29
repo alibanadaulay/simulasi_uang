@@ -1,6 +1,8 @@
 package com.ghifarix.simulasi_uang.extensions
 
+import android.app.Activity
 import android.content.Context
+import android.content.ContextWrapper
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
@@ -8,17 +10,58 @@ import android.graphics.Paint
 import android.graphics.Typeface
 import android.graphics.pdf.PdfDocument
 import android.os.Environment
+import android.util.Log
 import androidx.core.content.ContextCompat
+import com.ghifarix.simulasi_uang.BuildConfig
 import com.ghifarix.simulasi_uang.R
 import com.ghifarix.simulasi_uang.SingletonModel
 import com.ghifarix.simulasi_uang.model.Pdf
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import java.io.File
 import java.io.FileOutputStream
 import java.util.Date
 import kotlin.math.roundToInt
 
 
-fun Context.generatePdf(pdf: Pdf = SingletonModel.getInstance().getPdfByPinjol()): String {
+internal fun Context.getActivity(): Activity {
+    var context = this
+    while (context is ContextWrapper) {
+        if (context is Activity) return context
+        context = context.baseContext
+    }
+    throw IllegalStateException("Permissions should be called in the context of an Activity")
+}
+
+internal fun Context.interstitialAd(onCallback: (InterstitialAd?) -> Unit) {
+    val adRequest = AdRequest.Builder().build()
+    val unitId = if (BuildConfig.BUILD_TYPE == "debug") {
+        "ca-app-pub-3940256099942544/1033173712"
+    } else {
+        "ca-app-pub-3134124105900068/6991287904"
+    }
+    InterstitialAd.load(this, unitId, adRequest, object :
+        InterstitialAdLoadCallback() {
+        override fun onAdLoaded(interstitialAd: InterstitialAd) {
+            super.onAdLoaded(interstitialAd)
+            onCallback(interstitialAd)
+        }
+
+        override fun onAdFailedToLoad(interstitialAd: LoadAdError) {
+            super.onAdFailedToLoad(interstitialAd)
+            Log.e("KprDetailScreenF", "$interstitialAd")
+            onCallback(null)
+        }
+    })
+
+}
+
+fun Context.generatePdf(pdf: Pdf? = SingletonModel.getInstance().getPdf()): String? {
+    if (pdf == null) {
+        return null
+    }
     val pageHeight = 1120
     val pageWidth = 792
 
@@ -107,7 +150,8 @@ fun Context.generatePdf(pdf: Pdf = SingletonModel.getInstance().getPdfByPinjol()
 
     } catch (e: Exception) {
         e.printStackTrace()
+        return null
     }
     pdfDocument.close()
-    return "$date.pdf"
+    return file.absolutePath
 }

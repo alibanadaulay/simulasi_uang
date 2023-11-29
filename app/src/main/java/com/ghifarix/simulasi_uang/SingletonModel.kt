@@ -1,6 +1,6 @@
 package com.ghifarix.simulasi_uang
 
-import android.util.Log
+import com.ghifarix.simulasi_uang.model.GeneratePdf
 import com.ghifarix.simulasi_uang.model.Pdf
 import com.ghifarix.simulasi_uang.model.PdfItem
 import com.ghifarix.simulasi_uang.screens.kpr.model.Kpr
@@ -13,7 +13,7 @@ class SingletonModel {
         private var instance: SingletonModel? = null
         private var _kpr: Kpr? = null
         private var _pinjol: Pinjol? = null
-        private var _countReward = 0
+        private var _pdf: Pdf? = null
 
         fun getInstance(): SingletonModel {
             if (instance == null) {
@@ -38,6 +38,15 @@ class SingletonModel {
     }
 
     fun getPinjol() = _pinjol
+
+    fun generatePdf(generatePdf: GeneratePdf) {
+        _pdf = when (generatePdf) {
+            GeneratePdf.KPR -> getPdfByKpr()
+            GeneratePdf.PINJOL -> getPdfByPinjol()
+        }
+    }
+
+    fun getPdf() = _pdf
     fun getPdfByPinjol(): Pdf {
         val map = mutableMapOf<String, String>()
         val items: MutableList<PdfItem> = mutableListOf()
@@ -93,17 +102,5 @@ class SingletonModel {
             }
         }
         return Pdf(model = map, items = items)
-    }
-
-    fun getCountReward(): Boolean {
-        _countReward++
-        Log.e("Singleton", "$_countReward")
-        return _countReward >= 3
-    }
-
-    fun resetCountReward() {
-        if (_countReward > 3) {
-            _countReward = 0
-        }
     }
 }

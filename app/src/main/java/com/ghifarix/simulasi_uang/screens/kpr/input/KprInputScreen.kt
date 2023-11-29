@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -32,7 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.ghifarix.simulasi_uang.components.BannerAds
+import com.ghifarix.simulasi_uang.components.BannerAdsView
 import com.ghifarix.simulasi_uang.components.BaseLoan
 import com.ghifarix.simulasi_uang.components.SubmitButton
 import com.ghifarix.simulasi_uang.components.TextFieldCustom
@@ -66,7 +67,11 @@ fun KprInputScreen(
                 })
         }
     ) { padding ->
-        Column(modifier = Modifier.padding(paddingValues = padding)) {
+        Column(
+            modifier = Modifier
+                .padding(paddingValues = padding)
+                .fillMaxSize()
+        ) {
             BaseLoan(onTextChanged = kprInputViewModel::updateBaseLoan)
             Row(horizontalArrangement = Arrangement.SpaceEvenly) {
                 val modifier = Modifier
@@ -106,7 +111,7 @@ fun KprInputScreen(
                 text = "Hitung"
             )
             Spacer(modifier = Modifier.weight(1f))
-            BannerAds()
+            BannerAdsView()
         }
     }
 }

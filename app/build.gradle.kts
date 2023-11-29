@@ -1,11 +1,18 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-parcelize")
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
-    id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
+}
+private val keyProperties = Properties()
+val keyPropertiesFile = project.rootProject.file("local.properties")
+if (keyPropertiesFile.exists()) {
+    keyProperties.load(FileInputStream(keyPropertiesFile))
 }
 
 android {
@@ -19,16 +26,27 @@ android {
         versionCode = 1
         versionName = "1.0.1"
 
+        vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+    signingConfigs {
+        create("simulasi-uang") {
+            keyAlias = keyProperties["keyAlias"] as String
+            keyPassword = keyProperties["keyPassword"] as String
+            storeFile = keyProperties["storeFile"]?.let { project.file(it) }
+            storePassword = keyProperties["storePassword"] as String
+        }
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
+            signingConfigs.getByName("simulasi-uang")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("simulasi-uang")
         }
     }
     compileOptions {
@@ -41,11 +59,14 @@ android {
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.4"
     }
+
+
 }
 
 dependencies {

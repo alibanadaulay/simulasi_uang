@@ -2,6 +2,8 @@
 
 package com.ghifarix.simulasi_uang.screens.kpr.detail
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
@@ -42,38 +44,91 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ghifarix.simulasi_uang.SingletonModel
 import com.ghifarix.simulasi_uang.extensions.generatePdf
+import com.ghifarix.simulasi_uang.extensions.getActivity
+import com.ghifarix.simulasi_uang.extensions.interstitialAd
+import com.ghifarix.simulasi_uang.model.GeneratePdf
 import com.ghifarix.simulasi_uang.screens.kpr.model.Kpr
+import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.FullScreenContentCallback
+
 
 private const val textDp = 150
+private const val TAG = "KprDetailScreen"
 
 @Composable
-fun KprDetailScreen(kprDetailViewModel: KprDetailViewModel, onBack:() -> Unit={}) {
+fun KprDetailScreen(kprDetailViewModel: KprDetailViewModel, onBack: () -> Unit = {}) {
+    val context = LocalContext.current
     LaunchedEffect(key1 = true) {
         kprDetailViewModel.getKpr()
-    }
+        context.interstitialAd {
+            kprDetailViewModel.interstitialAd(it)
+            it?.fullScreenContentCallback = object : FullScreenContentCallback() {
+                override fun onAdDismissedFullScreenContent() {
+                    Log.e(TAG, "Ad dismissed fullscreen content.");
+                    kprDetailViewModel.interstitialAd(null)
+                    val result = context.generatePdf()
+                    if (result != null) {
+                        Toast.makeText(context, result, Toast.LENGTH_SHORT).show()
+                    }
+                }
 
-    val state = kprDetailViewModel.state.collectAsState().value
-    val context = LocalContext.current
-    Scaffold(topBar = { TopAppBar(title = {
-        Row (verticalAlignment = Alignment.CenterVertically){
-            IconButton(onClick = { onBack() }) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "back from kpr detail"
-                )
-            }
-            Text(text = "Detail Angsuran")
-            Spacer(modifier = Modifier.weight(1f))
-            IconButton(onClick = {
-                context.generatePdf(pdf = SingletonModel.getInstance().getPdfByKpr())
-            }) {
-                Icon(
-                    imageVector = Icons.Default.Download,
-                    contentDescription = "download kpr"
-                )
+                override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+                    Log.e(TAG, "Ad failed to show fullscreen content.");
+                    kprDetailViewModel.interstitialAd(null)
+                }
+
+                override fun onAdImpression() {
+                    Log.e(TAG, "Ad recorded an impression.");
+                }
+
+                override fun onAdClicked() {
+                    Log.e(TAG, "Ad was clicked.");
+                }
+
+                override fun onAdShowedFullScreenContent() {
+                    Log.e(TAG, "Ad showed fullscreen content.");
+                    SingletonModel.getInstance().generatePdf(GeneratePdf.KPR)
+                }
             }
         }
-    }) }) { pads ->
+    }
+    val state = kprDetailViewModel.state.collectAsState().value
+
+    Scaffold(topBar = {
+        TopAppBar(title = {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                IconButton(onClick = {
+                    onBack()
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "back from kpr detail"
+                    )
+                }
+                Text(text = "Detail Angsuran")
+                Spacer(modifier = Modifier.weight(1f))
+                IconButton(onClick = {
+                    if (kprDetailViewModel.getInterstitialAd() == null) {
+                        SingletonModel.getInstance().generatePdf(GeneratePdf.KPR)
+                        val result = context.generatePdf()
+                        if (result != null) {
+                            Toast.makeText(context, result, Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        context.getActivity().let {
+                            kprDetailViewModel
+                                .getInterstitialAd()?.show(it)
+                        }
+                    }
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.Download,
+                        contentDescription = "download kpr"
+                    )
+                }
+            }
+        })
+    }) { pads ->
         when (state) {
             is KprDetailState.LoadKprDetails -> {
                 Column(modifier = Modifier.padding(pads)) {
@@ -98,11 +153,12 @@ private fun ShowList(kpr: Kpr) {
             .fillMaxHeight()
             .horizontalScroll(state = rememberScrollState())
     ) {
-        Row (
+        Row(
             Modifier
                 .padding(start = 8.dp, end = 8.dp, bottom = 8.dp)
                 .background(MaterialTheme.colorScheme.secondary)
-                .padding(4.dp)){
+                .padding(4.dp)
+        ) {
             Text(
                 text = "Bulan",
                 modifier = Modifier.width(64.dp),
@@ -122,9 +178,11 @@ private fun ShowList(kpr: Kpr) {
         LazyColumn(content = {
             items(kpr.kprItems.size) {
                 val item = kpr.kprItems[it]
-                val isLast =it == kpr.kprItems.size -1
-                Column (modifier = Modifier
-                    .padding(all = 8.dp)){
+                val isLast = it == kpr.kprItems.size - 1
+                Column(
+                    modifier = Modifier
+                        .padding(all = 8.dp)
+                ) {
                     Row(horizontalArrangement = Arrangement.SpaceEvenly) {
                         Text(
                             text = item.month,
@@ -168,8 +226,8 @@ private fun ShowDetail(kpr: Kpr = Kpr()) {
             title = "Bunga (Riba)", text = "${kpr.interest}%"
         )
         DetailLoanText(
-                title = "Lama Pinjaman (Tahun)", text = kpr
-        .years.toString()
+            title = "Lama Pinjaman (Tahun)", text = kpr
+                .years.toString()
         )
         DetailLoanText(
             title = "Pertambahan (${kpr.interestAtPercentage}%)", text = "Rp ${kpr.interestAmount}"
@@ -191,7 +249,7 @@ private fun DetailLoanText(title: String, text: String) {
 }
 
 @Composable
-private fun DetailLoanItemText(text: String, isLast:Boolean){
+private fun DetailLoanItemText(text: String, isLast: Boolean) {
     val fontWeight = if (isLast) FontWeight.Bold else FontWeight.Light
     Text(
         modifier = Modifier.width(textDp.dp),
@@ -215,6 +273,6 @@ private fun TitleText(text: String) {
 
 @Composable
 @Preview
-fun ShowDetailPreview (){
+fun ShowDetailPreview() {
     ShowDetail()
 }

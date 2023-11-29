@@ -14,7 +14,6 @@
         tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
-    <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
 
     <application
         android:name=".SimulationUangApp"
@@ -26,7 +25,6 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:enableOnBackInvokedCallback="true"
         android:theme="@style/Theme.Simulasiuang"
         tools:targetApi="tiramisu">
 
@@ -42,6 +40,7 @@
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3134124105900068~7515636742" />
+        <!--            android:value="ca-app-pub-5474571366428116~6242400131"/>-->
     </application>
 
 </manifest>
