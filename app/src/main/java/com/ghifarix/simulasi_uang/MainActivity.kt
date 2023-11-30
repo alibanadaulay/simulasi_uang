@@ -50,14 +50,12 @@ class MainActivity : ComponentActivity() {
                 .setTestDeviceIds(listOf("FE3D232A299C3A41B61491040D192DD9")).build()
         )
         super.onCreate(savedInstanceState)
-//        FirebaseCrashlytics.getInstance().sendUnsentReports()
         setContent {
             val colors = if (isSystemInDarkTheme()) {
                 DarkColorPalette
             } else {
                 LightColorPalette
             }
-//
             MaterialTheme(colorScheme = colors) {
                 val navController = rememberNavController()
                 val scope = rememberCoroutineScope()
@@ -126,31 +124,6 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
-
-//                Surface(
-//                    modifier = Modifier.fillMaxSize(),
-//                ) {
-//                    Column(
-//                        modifier = Modifier.fillMaxSize(),
-//                        horizontalAlignment = Alignment.CenterHorizontally,
-//                        verticalArrangement = Arrangement.Center
-//                    ) {
-//                        Text(
-//                            text = "Sampple",
-//                            fontWeight = FontWeight.Bold
-//                        )
-//
-//                        Spacer(modifier = Modifier.height(20.dp))
-//
-//                        Row(
-//                            modifier = Modifier.fillMaxWidth(),
-//                            horizontalArrangement = Arrangement.Center
-//                        ) {
-//                            BannerAdsView()
-////                            BannerAdView()
-//                        }
-//                    }
-//                }
         }
     }
 }

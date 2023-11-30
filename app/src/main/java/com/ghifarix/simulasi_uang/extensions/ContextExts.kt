@@ -10,7 +10,6 @@ import android.graphics.Paint
 import android.graphics.Typeface
 import android.graphics.pdf.PdfDocument
 import android.os.Environment
-import android.util.Log
 import androidx.core.content.ContextCompat
 import com.ghifarix.simulasi_uang.BuildConfig
 import com.ghifarix.simulasi_uang.R
@@ -38,9 +37,9 @@ internal fun Context.getActivity(): Activity {
 internal fun Context.interstitialAd(onCallback: (InterstitialAd?) -> Unit) {
     val adRequest = AdRequest.Builder().build()
     val unitId = if (BuildConfig.BUILD_TYPE == "debug") {
-        "ca-app-pub-3940256099942544/1033173712"
+        this.getString(R.string.ad_mob_test_interstitial_ad)
     } else {
-        "ca-app-pub-3134124105900068/6991287904"
+        this.getString(R.string.ad_mob_interstitial_ad)
     }
     InterstitialAd.load(this, unitId, adRequest, object :
         InterstitialAdLoadCallback() {
@@ -51,7 +50,6 @@ internal fun Context.interstitialAd(onCallback: (InterstitialAd?) -> Unit) {
 
         override fun onAdFailedToLoad(interstitialAd: LoadAdError) {
             super.onAdFailedToLoad(interstitialAd)
-            Log.e("KprDetailScreenF", "$interstitialAd")
             onCallback(null)
         }
     })
