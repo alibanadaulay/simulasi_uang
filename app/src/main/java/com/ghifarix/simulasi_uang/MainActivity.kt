@@ -27,9 +27,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.ghifarix.simulasi_uang.screens.kpr.create.KPR_INPUT_ROUTE
+import com.ghifarix.simulasi_uang.screens.kpr.create.kprInputNav
 import com.ghifarix.simulasi_uang.screens.kpr.detail.kprDetailNav
-import com.ghifarix.simulasi_uang.screens.kpr.input.KPR_INPUT_ROUTE
-import com.ghifarix.simulasi_uang.screens.kpr.input.kprInputNav
 import com.ghifarix.simulasi_uang.screens.pinjol.create.PINJOL_CREATE_ROUTE
 import com.ghifarix.simulasi_uang.screens.pinjol.create.pinjolCreateNav
 import com.ghifarix.simulasi_uang.screens.pinjol.detail.pinjolDetailNav

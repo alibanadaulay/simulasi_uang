@@ -1,4 +1,4 @@
-package com.ghifarix.simulasi_uang.screens.kpr.input
+package com.ghifarix.simulasi_uang.screens.kpr.create
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -18,14 +18,14 @@ import kotlin.math.pow
 
 
 @HiltViewModel
-class KprInputViewModel @Inject constructor() : ViewModel() {
+class KprCreateViewModel @Inject constructor() : ViewModel() {
     private var _kprType: KprType = KprType.ANUITAS
     private var _baseLoan = 0.0
     private var _years = 0
     private var _interest = 0.0
     private var _dp = 0.0
-    private val _state: MutableStateFlow<KprInputState> = MutableStateFlow(KprInputState.Idle)
-    val state: StateFlow<KprInputState> = _state
+    private val _state: MutableStateFlow<KprCreateState> = MutableStateFlow(KprCreateState.Idle)
+    val state: StateFlow<KprCreateState> = _state
     private val _dpAmount: MutableStateFlow<String> = MutableStateFlow("0.0")
     val dpAmount: StateFlow<String> = _dpAmount
 
@@ -150,7 +150,7 @@ class KprInputViewModel @Inject constructor() : ViewModel() {
             interestAmount = totalInterest.roundOffDecimal()
         )
         SingletonModel.getInstance().updateKpr(kpr)
-        _state.value = KprInputState.Submit
+        _state.value = KprCreateState.Submit
     }
 
     private fun calculateFlat() {
@@ -198,12 +198,12 @@ class KprInputViewModel @Inject constructor() : ViewModel() {
             interestAmount = totalInterest.roundOffDecimal()
         )
         SingletonModel.getInstance().updateKpr(kpr)
-        _state.value = KprInputState.Submit
+        _state.value = KprCreateState.Submit
     }
 
     fun resetState() {
         viewModelScope.launch {
-            _state.value = KprInputState.Idle
+            _state.value = KprCreateState.Idle
             _baseLoan = 0.0
             _years = 0
             _interest = 0.0
@@ -257,6 +257,6 @@ class KprInputViewModel @Inject constructor() : ViewModel() {
             interestAmount = totalInterest.roundOffDecimal()
         )
         SingletonModel.getInstance().updateKpr(kpr)
-        _state.value = KprInputState.Submit
+        _state.value = KprCreateState.Submit
     }
 }

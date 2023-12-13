@@ -1,4 +1,4 @@
-package com.ghifarix.simulasi_uang.screens.kpr.input
+package com.ghifarix.simulasi_uang.screens.kpr.create
 
 import androidx.compose.material3.DrawerState
 import androidx.compose.runtime.rememberCoroutineScope

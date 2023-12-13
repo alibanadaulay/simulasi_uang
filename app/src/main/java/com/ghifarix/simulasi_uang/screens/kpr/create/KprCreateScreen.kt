@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.ghifarix.simulasi_uang.screens.kpr.input
+package com.ghifarix.simulasi_uang.screens.kpr.create
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -43,23 +43,24 @@ import com.ghifarix.simulasi_uang.screens.kpr.model.KprType
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun KprInputScreen(
-    kprInputViewModel: KprInputViewModel,
+    kprCreateViewModel: KprCreateViewModel,
     onClickHamburger: () -> Unit = {},
     onNavigateToDetail: () -> Unit = {}
 ) {
 
 
-    val state = kprInputViewModel.state.collectAsState().value
-    val dpAmount = kprInputViewModel.dpAmount.collectAsState().value
+    val state = kprCreateViewModel.state.collectAsState().value
+    val dpAmount = kprCreateViewModel.dpAmount.collectAsState().value
 
-    if (state is KprInputState.Submit) {
+    if (state is KprCreateState.Submit) {
         onNavigateToDetail()
-        kprInputViewModel.resetState()
+        kprCreateViewModel.resetState()
     }
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text(text = "KPR") },
+            TopAppBar(
+                title = { Text(text = "KPR") },
                 navigationIcon = {
                     IconButton(onClick = { onClickHamburger() }) {
                         Icon(imageVector = Icons.Filled.Menu, contentDescription = "hamburger menu")
@@ -72,7 +73,7 @@ fun KprInputScreen(
                 .padding(paddingValues = padding)
                 .fillMaxSize()
         ) {
-            BaseLoan(onTextChanged = kprInputViewModel::updateBaseLoan)
+            BaseLoan(onTextChanged = kprCreateViewModel::updateBaseLoan)
             Row(horizontalArrangement = Arrangement.SpaceEvenly) {
                 val modifier = Modifier
                     .padding(all = 8.dp)
@@ -81,12 +82,12 @@ fun KprInputScreen(
                     modifier = modifier,
                     icon = Icons.Default.CalendarToday,
                     label = "Lama Pinjaman (Tahun)",
-                    onTextChanged = kprInputViewModel::updateYears
+                    onTextChanged = kprCreateViewModel::updateYears
                 )
                 TextFieldCustom(
                     modifier = modifier,
                     label = "Bunga (Riba)",
-                    onTextChanged = kprInputViewModel::updateRate
+                    onTextChanged = kprCreateViewModel::updateRate
                 )
             }
             Row {
@@ -102,12 +103,12 @@ fun KprInputScreen(
                 TextFieldCustom(
                     modifier = modifier.weight(0.3f),
                     label = "DP",
-                    onTextChanged = kprInputViewModel::updateDp
+                    onTextChanged = kprCreateViewModel::updateDp
                 )
             }
-            KprType(onClickType = kprInputViewModel::updateKprType)
+            KprType(onClickType = kprCreateViewModel::updateKprType)
             SubmitButton(
-                onClick = kprInputViewModel::calculate,
+                onClick = kprCreateViewModel::calculate,
                 text = "Hitung"
             )
             Spacer(modifier = Modifier.weight(1f))
