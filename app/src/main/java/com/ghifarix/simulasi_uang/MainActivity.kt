@@ -30,6 +30,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.ghifarix.simulasi_uang.screens.investment.create.INVESTMENT_CREATE_ROUTE
 import com.ghifarix.simulasi_uang.screens.investment.create.investmentCreateNav
+import com.ghifarix.simulasi_uang.screens.investment.detail.investmentDetailNav
 import com.ghifarix.simulasi_uang.screens.kpr.create.KPR_INPUT_ROUTE
 import com.ghifarix.simulasi_uang.screens.kpr.create.kprInputNav
 import com.ghifarix.simulasi_uang.screens.kpr.detail.kprDetailNav
@@ -138,6 +139,7 @@ class MainActivity : ComponentActivity() {
                             navController = navController,
                             drawerState = drawerState
                         )
+                        investmentDetailNav(navController = navController)
                     }
                 }
             }

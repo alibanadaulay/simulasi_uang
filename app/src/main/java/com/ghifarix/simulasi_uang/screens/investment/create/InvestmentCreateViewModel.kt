@@ -9,6 +9,8 @@ import com.ghifarix.simulasi_uang.extensions.roundOffDecimal
 import com.ghifarix.simulasi_uang.screens.investment.model.Investment
 import com.ghifarix.simulasi_uang.screens.investment.model.InvestmentItem
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,6 +19,8 @@ class InvestmentCreateViewModel @Inject constructor() : ViewModel() {
     private var _baseInvestment: Double = 0.0
     private var _years: Int = 0
     private var _investmentRate: Double = 0.0
+    private val _state = MutableStateFlow<InvestmentCreateState>(InvestmentCreateState.Idle)
+    val state: StateFlow<InvestmentCreateState> = _state
 
     fun updateYears(years: String) {
         viewModelScope.launch {
@@ -74,6 +78,13 @@ class InvestmentCreateViewModel @Inject constructor() : ViewModel() {
                     investmentItem = investmentItems
                 )
             )
+            _state.value = InvestmentCreateState.Submit
+        }
+    }
+
+    fun reset() {
+        viewModelScope.launch {
+            _state.value = InvestmentCreateState.Idle
         }
     }
 }

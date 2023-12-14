@@ -9,6 +9,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -21,10 +23,26 @@ import com.ghifarix.simulasi_uang.components.TextFieldCustom
 import com.ghifarix.simulasi_uang.components.TopAppBarHamburgerMenu
 
 @Composable
-fun InvestmentCreateScreen(vm: InvestmentCreateViewModel = hiltViewModel()) {
+fun InvestmentCreateScreen(
+    vm: InvestmentCreateViewModel = hiltViewModel(),
+    onSubmit: () -> Unit = {},
+    onClickHamburger: () -> Unit = {}
+) {
 
+    val state = vm.state.collectAsState().value
+    LaunchedEffect(key1 = true) {
+        if (state is InvestmentCreateState.Submit) {
+            onSubmit()
+            vm.reset()
+        }
+    }
 
-    Scaffold(topBar = { TopAppBarHamburgerMenu(title = stringResource(id = R.string.investment)) }) { padd ->
+    Scaffold(topBar = {
+        TopAppBarHamburgerMenu(
+            title = stringResource(id = R.string.investment),
+            onClickHamburger = onClickHamburger
+        )
+    }) { padd ->
         Column(modifier = Modifier.padding(padd)) {
             BaseLoan(onTextChanged = vm::updateBaseLoan)
             Row(horizontalArrangement = Arrangement.SpaceEvenly) {
