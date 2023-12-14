@@ -22,11 +22,14 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.ghifarix.simulasi_uang.screens.investment.create.INVESTMENT_CREATE_ROUTE
+import com.ghifarix.simulasi_uang.screens.investment.create.investmentCreateNav
 import com.ghifarix.simulasi_uang.screens.kpr.create.KPR_INPUT_ROUTE
 import com.ghifarix.simulasi_uang.screens.kpr.create.kprInputNav
 import com.ghifarix.simulasi_uang.screens.kpr.detail.kprDetailNav
@@ -114,6 +117,16 @@ class MainActivity : ComponentActivity() {
                                     navController.navigate(PINJOL_CREATE_ROUTE)
                                 }
                             )
+                            NavigationDrawerItem(
+                                label = { Text(text = stringResource(id = R.string.investment)) },
+                                selected = false,
+                                onClick = {
+                                    scope.launch {
+                                        drawerState.close()
+                                    }
+                                    navController.navigate(INVESTMENT_CREATE_ROUTE)
+                                }
+                            )
                         }
                     }) {
                     NavHost(navController = navController, startDestination = KPR_INPUT_ROUTE) {
@@ -121,6 +134,10 @@ class MainActivity : ComponentActivity() {
                         kprDetailNav(navController = navController)
                         pinjolCreateNav(navController = navController, drawerState = drawerState)
                         pinjolDetailNav(navController = navController)
+                        investmentCreateNav(
+                            navController = navController,
+                            drawerState = drawerState
+                        )
                     }
                 }
             }

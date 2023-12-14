@@ -13,17 +13,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Money
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
@@ -38,9 +34,9 @@ import com.ghifarix.simulasi_uang.components.BaseLoan
 import com.ghifarix.simulasi_uang.components.SubmitButton
 import com.ghifarix.simulasi_uang.components.TextFieldCustom
 import com.ghifarix.simulasi_uang.components.TextFieldDisplay
+import com.ghifarix.simulasi_uang.components.TopAppBarHamburgerMenu
 import com.ghifarix.simulasi_uang.screens.kpr.model.KprType
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun KprInputScreen(
     kprCreateViewModel: KprCreateViewModel,
@@ -59,13 +55,10 @@ fun KprInputScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text(text = "KPR") },
-                navigationIcon = {
-                    IconButton(onClick = { onClickHamburger() }) {
-                        Icon(imageVector = Icons.Filled.Menu, contentDescription = "hamburger menu")
-                    }
-                })
+            TopAppBarHamburgerMenu(
+                title = "KPR",
+                onClickHamburger = onClickHamburger
+            )
         }
     ) { padding ->
         Column(

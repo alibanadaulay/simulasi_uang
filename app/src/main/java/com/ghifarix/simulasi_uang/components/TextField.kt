@@ -90,8 +90,8 @@ fun BaseLoan(
 
 @Composable
 fun TextFieldCustom(
-    maxLength: Int = 5,
     modifier: Modifier = Modifier,
+    maxLength: Int = 5,
     state: MutableState<TextFieldValue> =
         remember {
             mutableStateOf(
@@ -117,7 +117,7 @@ fun TextFieldCustom(
         value = state.value,
         onValueChange = {
             var currentText = it.text
-            if (currentText.length > 5) {
+            if (currentText.length > maxLength) {
                 return@OutlinedTextField
             }
             maxInterest?.let { max ->

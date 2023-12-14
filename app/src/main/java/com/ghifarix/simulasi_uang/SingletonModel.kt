@@ -3,6 +3,7 @@ package com.ghifarix.simulasi_uang
 import com.ghifarix.simulasi_uang.model.GeneratePdf
 import com.ghifarix.simulasi_uang.model.Pdf
 import com.ghifarix.simulasi_uang.model.PdfItem
+import com.ghifarix.simulasi_uang.screens.investment.model.Investment
 import com.ghifarix.simulasi_uang.screens.kpr.model.Kpr
 import com.ghifarix.simulasi_uang.screens.pinjol.model.Pinjol
 import com.ghifarix.simulasi_uang.screens.pinjol.model.PinjolType
@@ -14,6 +15,7 @@ class SingletonModel {
         private var _kpr: Kpr? = null
         private var _pinjol: Pinjol? = null
         private var _pdf: Pdf? = null
+        private var _investment: Investment? = null
 
         fun getInstance(): SingletonModel {
             if (instance == null) {
@@ -39,6 +41,11 @@ class SingletonModel {
 
     fun getPinjol() = _pinjol
 
+    fun updateInvestment(investment: Investment) {
+        _investment = investment
+    }
+
+    fun getInvestment() = _investment
     fun generatePdf(generatePdf: GeneratePdf) {
         _pdf = when (generatePdf) {
             GeneratePdf.KPR -> getPdfByKpr()
