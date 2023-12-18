@@ -21,6 +21,7 @@ class InvestmentCreateViewModel @Inject constructor() : ViewModel() {
     private var _baseInvestmentIncrease: Double = 0.0
     private var _years: Int = 0
     private var _tax: Double = 0.0
+    private var _incereaseBaseYear: Int = 0
     private val _state = MutableStateFlow<InvestmentCreateState>(InvestmentCreateState.Idle)
     val state: StateFlow<InvestmentCreateState> = _state
 
@@ -30,6 +31,16 @@ class InvestmentCreateViewModel @Inject constructor() : ViewModel() {
                 0
             } else {
                 years.convertToInt()
+            }
+        }
+    }
+
+    fun updateIncreaseYear(increaseYear: String) {
+        viewModelScope.launch {
+            _incereaseBaseYear = if (increaseYear.isBlank()) {
+                0
+            } else {
+                increaseYear.convertToInt()
             }
         }
     }
@@ -78,18 +89,30 @@ class InvestmentCreateViewModel @Inject constructor() : ViewModel() {
     fun calculate() {
         viewModelScope.launch {
             var i = 0
+            var count = _incereaseBaseYear
+            var totalInvestment = _baseInvestment
             var investment = _baseInvestment
             var totalInvestmentIncrease = 0.0
             var totalTax = 0.0
             val investmentItems = mutableListOf<InvestmentItem>()
-            investmentItems.add(InvestmentItem())
+            investmentItems.add(
+                InvestmentItem(
+                    time = "0",
+                    investment = _baseInvestment.roundOffDecimal()
+                )
+            )
             while (i < _years) {
                 val investmentIncrease = investment * _investmentRate / 100
                 val tax = investmentIncrease * _tax / 100
                 val afterTax = (investmentIncrease - tax)
                 totalTax += tax
                 totalInvestmentIncrease += afterTax
-                investment += (afterTax + _baseInvestmentIncrease)
+                investment += afterTax
+                if (count > 0) {
+                    investment += _baseInvestmentIncrease
+                    totalInvestment += _baseInvestmentIncrease
+                    count--
+                }
                 val investmentItem = InvestmentItem(
                     time = (i + 1).toString(),
                     tax = tax.roundOffDecimal(),
@@ -99,6 +122,8 @@ class InvestmentCreateViewModel @Inject constructor() : ViewModel() {
                 investmentItems.add(investmentItem)
                 i++
             }
+            val percentageIncrease = (investment / totalInvestment * 100).roundOffDecimal()
+            val amountIncrease = investment - totalInvestment
             investmentItems.add(
                 InvestmentItem(
                     time = "Total",
@@ -112,8 +137,13 @@ class InvestmentCreateViewModel @Inject constructor() : ViewModel() {
                     baseInvestment = _baseInvestment.roundOffDecimal(),
                     investmentTime = _years,
                     tax = _tax.roundOffDecimal(),
+                    increaseInvestment = _baseInvestmentIncrease.roundOffDecimal(),
+                    increaseTime = _incereaseBaseYear,
+                    totalInvestment = totalInvestment.roundOffDecimal(),
                     investmentRate = _investmentRate.roundOffDecimal(),
-                    investmentItem = investmentItems
+                    investmentItem = investmentItems,
+                    percentageIncrease = percentageIncrease,
+                    amountIncrease = amountIncrease.roundOffDecimal(),
                 )
             )
             _state.value = InvestmentCreateState.Submit
@@ -123,6 +153,12 @@ class InvestmentCreateViewModel @Inject constructor() : ViewModel() {
     fun reset() {
         viewModelScope.launch {
             _state.value = InvestmentCreateState.Idle
+            _baseInvestment = 0.0
+            _investmentRate = 0.0
+            _baseInvestmentIncrease = 0.0
+            _years = 0
+            _tax = 0.0
+            _incereaseBaseYear = 0
         }
     }
 }

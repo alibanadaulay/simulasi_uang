@@ -61,10 +61,21 @@ fun InvestmentCreateScreen(
                     onTextChanged = vm::updateInvestment
                 )
             }
-            BaseLoan(
-                onTextChanged = vm::updateInvestmentIncrease,
-                label = "Tambahkan Model Investasi Tiap Tahun"
-            )
+            Row(horizontalArrangement = Arrangement.SpaceEvenly) {
+                val modifier = Modifier
+                    .padding(all = 8.dp)
+                BaseLoan(
+                    modifier = modifier.weight(0.65f),
+                    onTextChanged = vm::updateInvestmentIncrease,
+                    label = "Tambahkan Model"
+                )
+                TextFieldCustom(
+                    modifier = modifier.weight(0.35f),
+                    onTextChanged = vm::updateIncreaseYear,
+                    label = "Tahun",
+                    icon = Icons.Default.CalendarToday
+                )
+            }
             TextFieldCustom(
                 modifier = Modifier
                     .fillMaxWidth()

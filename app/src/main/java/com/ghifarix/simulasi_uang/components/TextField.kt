@@ -1,7 +1,11 @@
 package com.ghifarix.simulasi_uang.components
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Percent
@@ -15,15 +19,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import java.text.DecimalFormat
 
 
+private const val textDp = 150
+
 @Composable
 fun BaseLoan(
+    modifier: Modifier = Modifier
+        .padding(all = 7.dp)
+        .fillMaxWidth(),
     onTextChanged: (String) -> Unit = {},
     maxLength: Int = 14,
     label: String = "Jumlah Pinjaman"
@@ -39,9 +50,7 @@ fun BaseLoan(
         }
     var state = false
     OutlinedTextField(
-        modifier = Modifier
-            .padding(all = 7.dp)
-            .fillMaxWidth(),
+        modifier = modifier,
         label = {
             Text(text = label)
         },
@@ -106,6 +115,7 @@ fun TextFieldCustom(
     onTextChanged: (String) -> Unit = {},
     icon: ImageVector = Icons.Default.Percent,
     label: String = "",
+    initText: String = "0",
     maxInterest: Double? = null
 ) {
     var isOnchange = false
@@ -138,7 +148,7 @@ fun TextFieldCustom(
         maxLines = 1,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         placeholder = {
-            Text(text = "0.0")
+            Text(text = initText)
         },
         trailingIcon = {
             Icon(
@@ -176,6 +186,42 @@ fun TextFieldDisplay(
                 contentDescription = ""
             )
         })
+}
+
+@Composable
+fun DetailLoanItemText(text: String, isLast: Boolean) {
+    val fontWeight = if (isLast) FontWeight.Bold else FontWeight.Light
+    Text(
+        modifier = Modifier.width(textDp.dp),
+        text = text,
+        fontWeight = fontWeight,
+        textAlign = TextAlign.Center,
+        fontSize = 16.sp
+    )
+}
+
+@Composable
+fun TitleText(text: String) {
+    Text(
+        text = text,
+        modifier = Modifier.width(textDp.dp),
+        fontWeight = FontWeight.Bold,
+        textAlign = TextAlign.Center,
+        fontSize = 20.sp
+    )
+}
+
+@Composable
+fun DetailLoanText(title: String, text: String) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 8.dp, end = 8.dp, top = 2.dp, bottom = 2.dp)
+    ) {
+        Text(text = title, fontWeight = FontWeight.Normal, fontSize = 16.sp)
+        Spacer(modifier = Modifier.weight(1f))
+        Text(text = text, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+    }
 }
 
 

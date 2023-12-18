@@ -44,6 +44,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ghifarix.simulasi_uang.SingletonModel
 import com.ghifarix.simulasi_uang.components.BannerAdsView
+import com.ghifarix.simulasi_uang.components.DetailLoanItemText
+import com.ghifarix.simulasi_uang.components.TitleText
 import com.ghifarix.simulasi_uang.extensions.generatePdf
 import com.ghifarix.simulasi_uang.extensions.getActivity
 import com.ghifarix.simulasi_uang.extensions.interstitialAd
@@ -54,7 +56,6 @@ import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.FullScreenContentCallback
 
 
-private const val textDp = 150
 private const val TAG = "KprDetailScreen"
 
 @Composable
@@ -251,28 +252,7 @@ private fun DetailLoanText(title: String, text: String) {
     }
 }
 
-@Composable
-fun DetailLoanItemText(text: String, isLast: Boolean) {
-    val fontWeight = if (isLast) FontWeight.Bold else FontWeight.Light
-    Text(
-        modifier = Modifier.width(textDp.dp),
-        text = text,
-        fontWeight = fontWeight,
-        textAlign = TextAlign.Center,
-        fontSize = 16.sp
-    )
-}
 
-@Composable
-private fun TitleText(text: String) {
-    Text(
-        text = text,
-        modifier = Modifier.width(textDp.dp),
-        fontWeight = FontWeight.Bold,
-        textAlign = TextAlign.Center,
-        fontSize = 20.sp
-    )
-}
 
 @Composable
 @Preview
