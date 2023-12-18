@@ -50,6 +50,7 @@ class SingletonModel {
         _pdf = when (generatePdf) {
             GeneratePdf.KPR -> getPdfByKpr()
             GeneratePdf.PINJOL -> getPdfByPinjol()
+            GeneratePdf.INVESTASI -> getPdfByPinjol()
         }
     }
 

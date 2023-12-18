@@ -4,12 +4,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -30,13 +30,10 @@ fun InvestmentCreateScreen(
 ) {
 
     val state = vm.state.collectAsState().value
-    LaunchedEffect(key1 = true) {
-        if (state is InvestmentCreateState.Submit) {
-            onSubmit()
-            vm.reset()
-        }
+    if (state is InvestmentCreateState.Submit) {
+        onSubmit()
+        vm.reset()
     }
-
     Scaffold(topBar = {
         TopAppBarHamburgerMenu(
             title = stringResource(id = R.string.investment),
@@ -44,7 +41,10 @@ fun InvestmentCreateScreen(
         )
     }) { padd ->
         Column(modifier = Modifier.padding(padd)) {
-            BaseLoan(onTextChanged = vm::updateBaseLoan)
+            BaseLoan(
+                onTextChanged = vm::updateBaseLoan,
+                label = "Modal Awal"
+            )
             Row(horizontalArrangement = Arrangement.SpaceEvenly) {
                 val modifier = Modifier
                     .padding(all = 8.dp)
@@ -52,8 +52,8 @@ fun InvestmentCreateScreen(
                 TextFieldCustom(
                     modifier = modifier,
                     icon = Icons.Default.CalendarToday,
-                    label = "Lama Investasi (Year)",
-                    onTextChanged = vm::updateYears
+                    label = "Pajak (10%)",
+                    onTextChanged = vm::updateTax
                 )
                 TextFieldCustom(
                     modifier = modifier,
@@ -61,6 +61,18 @@ fun InvestmentCreateScreen(
                     onTextChanged = vm::updateInvestment
                 )
             }
+            BaseLoan(
+                onTextChanged = vm::updateInvestmentIncrease,
+                label = "Tambahkan Model Investasi Tiap Tahun"
+            )
+            TextFieldCustom(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(all = 8.dp),
+                icon = Icons.Default.CalendarToday,
+                label = "Lama investasi (Tahun)",
+                onTextChanged = vm::updateYears
+            )
             SubmitButton(
                 onClick = vm::calculate,
                 text = "Hitung"

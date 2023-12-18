@@ -7,6 +7,8 @@ import androidx.navigation.compose.composable
 const val INVESTMENT_DETAIL_ROUTE = "investment_detail_route"
 fun NavGraphBuilder.investmentDetailNav(navController: NavController) {
     composable(INVESTMENT_DETAIL_ROUTE) {
-
+        InvestmentDetailScreen(onBack = {
+            navController.popBackStack()
+        })
     }
 }

@@ -25,7 +25,8 @@ import java.text.DecimalFormat
 @Composable
 fun BaseLoan(
     onTextChanged: (String) -> Unit = {},
-    maxLength: Int = 14
+    maxLength: Int = 14,
+    label: String = "Jumlah Pinjaman"
 ) {
     val stateValue =
         remember {
@@ -42,7 +43,7 @@ fun BaseLoan(
             .padding(all = 7.dp)
             .fillMaxWidth(),
         label = {
-            Text(text = "Jumlah Pinjaman")
+            Text(text = label)
         },
         value = stateValue.value,
         onValueChange = {

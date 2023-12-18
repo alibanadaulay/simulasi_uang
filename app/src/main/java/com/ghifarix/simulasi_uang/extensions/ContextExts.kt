@@ -10,6 +10,7 @@ import android.graphics.Paint
 import android.graphics.Typeface
 import android.graphics.pdf.PdfDocument
 import android.os.Environment
+import android.util.Log
 import androidx.core.content.ContextCompat
 import com.ghifarix.simulasi_uang.BuildConfig
 import com.ghifarix.simulasi_uang.R
@@ -45,11 +46,13 @@ internal fun Context.interstitialAd(onCallback: (InterstitialAd?) -> Unit) {
         InterstitialAdLoadCallback() {
         override fun onAdLoaded(interstitialAd: InterstitialAd) {
             super.onAdLoaded(interstitialAd)
+            Log.d("intersialAd", "onAdLoaded $interstitialAd")
             onCallback(interstitialAd)
         }
 
         override fun onAdFailedToLoad(interstitialAd: LoadAdError) {
             super.onAdFailedToLoad(interstitialAd)
+            Log.d("intersialAd", "onAdFailedToLoad $interstitialAd")
             onCallback(null)
         }
     })

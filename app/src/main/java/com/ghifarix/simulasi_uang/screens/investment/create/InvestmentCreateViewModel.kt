@@ -17,8 +17,10 @@ import javax.inject.Inject
 @HiltViewModel
 class InvestmentCreateViewModel @Inject constructor() : ViewModel() {
     private var _baseInvestment: Double = 0.0
-    private var _years: Int = 0
     private var _investmentRate: Double = 0.0
+    private var _baseInvestmentIncrease: Double = 0.0
+    private var _years: Int = 0
+    private var _tax: Double = 0.0
     private val _state = MutableStateFlow<InvestmentCreateState>(InvestmentCreateState.Idle)
     val state: StateFlow<InvestmentCreateState> = _state
 
@@ -42,6 +44,27 @@ class InvestmentCreateViewModel @Inject constructor() : ViewModel() {
         }
     }
 
+    fun updateInvestmentIncrease(addInvestment: String) {
+        viewModelScope.launch {
+            _baseInvestmentIncrease = if (addInvestment.isBlank()) {
+                0.0
+            } else {
+                addInvestment.replace(",", "").toDouble()
+            }
+        }
+    }
+
+
+    fun updateTax(tax: String) {
+        viewModelScope.launch {
+            _tax = if (tax.isBlank()) {
+                0.0
+            } else {
+                tax.convertToPoint()
+            }
+        }
+    }
+
     fun updateBaseLoan(investment: String) {
         viewModelScope.launch {
             _baseInvestment = if (investment.isBlank()) {
@@ -56,25 +79,40 @@ class InvestmentCreateViewModel @Inject constructor() : ViewModel() {
         viewModelScope.launch {
             var i = 0
             var investment = _baseInvestment
-            var totalInvestmentIncrease = "0.0"
+            var totalInvestmentIncrease = 0.0
+            var totalTax = 0.0
             val investmentItems = mutableListOf<InvestmentItem>()
+            investmentItems.add(InvestmentItem())
             while (i < _years) {
-                val investmentIncrease = _baseInvestment * _investmentRate / 100
-                totalInvestmentIncrease += investmentIncrease
-                investment += investmentIncrease
+                val investmentIncrease = investment * _investmentRate / 100
+                val tax = investmentIncrease * _tax / 100
+                val afterTax = (investmentIncrease - tax)
+                totalTax += tax
+                totalInvestmentIncrease += afterTax
+                investment += (afterTax + _baseInvestmentIncrease)
                 val investmentItem = InvestmentItem(
-                    time = i.toString(),
+                    time = (i + 1).toString(),
+                    tax = tax.roundOffDecimal(),
                     investment = investment.roundOffDecimal(),
-                    investmentIncrease = investmentIncrease.roundOffDecimal()
+                    investmentIncrease = investmentIncrease.roundOffDecimal(),
                 )
                 investmentItems.add(investmentItem)
                 i++
             }
+            investmentItems.add(
+                InvestmentItem(
+                    time = "Total",
+                    investment = investment.roundOffDecimal(),
+                    tax = totalTax.roundOffDecimal(),
+                    investmentIncrease = totalInvestmentIncrease.roundOffDecimal()
+                )
+            )
             SingletonModel.getInstance().updateInvestment(
                 Investment(
-                    baseInvestment = _baseInvestment.toString(),
+                    baseInvestment = _baseInvestment.roundOffDecimal(),
                     investmentTime = _years,
-                    investmentRate = _investmentRate.toString(),
+                    tax = _tax.roundOffDecimal(),
+                    investmentRate = _investmentRate.roundOffDecimal(),
                     investmentItem = investmentItems
                 )
             )
