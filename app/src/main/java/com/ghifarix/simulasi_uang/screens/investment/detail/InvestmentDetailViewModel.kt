@@ -3,7 +3,7 @@ package com.ghifarix.simulasi_uang.screens.investment.detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ghifarix.simulasi_uang.SingletonModel
-import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.rewarded.RewardedAd
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,12 +15,12 @@ class InvestmentDetailViewModel @Inject constructor() : ViewModel() {
 
     private val _state = MutableStateFlow<InvestmentDetailState>(InvestmentDetailState.Idle)
     val state: StateFlow<InvestmentDetailState> = _state
-    private val _interstitialAd = MutableStateFlow<InterstitialAd?>(null)
-    val interstitialAd: StateFlow<InterstitialAd?> = _interstitialAd
+    private val _rewardAd = MutableStateFlow<RewardedAd?>(null)
+    val rewardAd: StateFlow<RewardedAd?> = _rewardAd
 
-    fun updateInterstitialAds(interstitialAd: InterstitialAd?) {
+    fun updateInterstitialAds(rewardAd: RewardedAd?) {
         viewModelScope.launch {
-            _interstitialAd.value = interstitialAd
+            _rewardAd.value = rewardAd
         }
     }
 

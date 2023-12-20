@@ -25,11 +25,11 @@ import androidx.compose.ui.Modifier
 import com.ghifarix.simulasi_uang.SingletonModel
 import com.ghifarix.simulasi_uang.extensions.generatePdf
 import com.ghifarix.simulasi_uang.extensions.getActivity
-import com.ghifarix.simulasi_uang.extensions.interstitialAd
+import com.ghifarix.simulasi_uang.extensions.rewardAd
 import com.ghifarix.simulasi_uang.model.GeneratePdf
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.FullScreenContentCallback
-import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.rewarded.RewardedAd
 
 @Composable
 fun TopAppBarHamburgerMenu(
@@ -50,14 +50,14 @@ fun TopAppBack(
     context: Context,
     title: String = "title",
     onBack: () -> Unit = {},
-    interstitialAd: State<InterstitialAd?>,
-    initAds: (InterstitialAd?) -> Unit = {},
+    interstitialAd: State<RewardedAd?>,
+    initAds: (RewardedAd?) -> Unit = {},
     showingAds: (Activity) -> Unit = {},
     generatePdf: GeneratePdf = GeneratePdf.KPR
 ) {
     val tag = "TopAppBack_$title"
     LaunchedEffect(key1 = true) {
-        context.interstitialAd {
+        context.rewardAd {
             initAds(it)
             it?.fullScreenContentCallback = object : FullScreenContentCallback() {
                 override fun onAdDismissedFullScreenContent() {
@@ -84,7 +84,7 @@ fun TopAppBack(
 
                 override fun onAdShowedFullScreenContent() {
                     Log.d(tag, "Ad showed fullscreen content.");
-                    SingletonModel.getInstance().generatePdf(generatePdf)
+//                    SingletonModel.getInstance().generatePdf(generatePdf)
                 }
             }
         }

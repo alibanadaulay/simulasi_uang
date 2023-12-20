@@ -4,6 +4,7 @@
     <string name="ad_mob_test_banner_id">ca-app-pub-3940256099942544/6300978111</string>
     <string name="ad_mob_test_interstitial_ad">ca-app-pub-3940256099942544/1033173712</string>
     <string name="ad_mob_interstitial_ad">ca-app-pub-3134124105900068/6991287904</string>
+    <string name="ad_mob_test_reward_ad">ca-app-pub-3940256099942544/5224354917</string>
     <string name="investment">Investasi</string>
     <string name="investment_detail_title">Detail Investasi</string>
 </resources>

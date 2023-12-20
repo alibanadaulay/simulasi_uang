@@ -32,10 +32,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ghifarix.simulasi_uang.R
+import com.ghifarix.simulasi_uang.SingletonModel
 import com.ghifarix.simulasi_uang.components.DetailLoanText
 import com.ghifarix.simulasi_uang.components.TitleText
 import com.ghifarix.simulasi_uang.components.TopAppBack
 import com.ghifarix.simulasi_uang.model.GeneratePdf
+import com.google.android.gms.ads.AdLoader
 import com.ghifarix.simulasi_uang.components.DetailLoanItemText as DetailLoanItemText1
 
 @Composable
@@ -44,9 +46,13 @@ fun InvestmentDetailScreen(
     onBack: () -> Unit = {}
 ) {
 
-    val interstitialAd = viewModel.interstitialAd.collectAsState()
+    val interstitialAd = viewModel.rewardAd.collectAsState()
     val state = viewModel.state.collectAsState().value
     val context = LocalContext.current
+
+    val adLoader = AdLoader.Builder(context, "").forNativeAd {
+
+    }
 
     LaunchedEffect(key1 = true) {
         viewModel.getInvestment()
@@ -61,7 +67,9 @@ fun InvestmentDetailScreen(
             initAds = viewModel::updateInterstitialAds,
             generatePdf = GeneratePdf.INVESTASI,
             showingAds = {
-                interstitialAd.value?.show(it)
+                interstitialAd.value?.show(it) {
+                    SingletonModel.getInstance().generatePdf(GeneratePdf.INVESTASI)
+                }
             })
     }) {
         when (state) {
@@ -121,7 +129,7 @@ fun InvestmentDetailScreen(
                             Spacer(modifier = Modifier.width(10.dp))
                             TitleText(text = "Investasi")
                         }
-                        LazyColumn() {
+                        LazyColumn {
                             items(state.investment.investmentItem.size) { pos ->
                                 val item = state.investment.investmentItem[pos]
                                 val isLast = pos == state.investment.investmentItem.size - 1
