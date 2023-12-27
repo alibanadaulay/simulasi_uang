@@ -212,7 +212,7 @@ fun TitleText(text: String) {
 }
 
 @Composable
-fun DetailLoanText(title: String, text: String) {
+fun DetailLoanText(title: String = "title", text: String = "description") {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier
             .fillMaxWidth()

@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
@@ -28,16 +29,19 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ghifarix.simulasi_uang.R
 import com.ghifarix.simulasi_uang.SingletonModel
+import com.ghifarix.simulasi_uang.components.BannerAdsView
 import com.ghifarix.simulasi_uang.components.DetailLoanText
 import com.ghifarix.simulasi_uang.components.TitleText
 import com.ghifarix.simulasi_uang.components.TopAppBack
 import com.ghifarix.simulasi_uang.model.GeneratePdf
-import com.google.android.gms.ads.AdLoader
+import com.ghifarix.simulasi_uang.screens.investment.model.Investment
+import com.google.android.gms.ads.AdSize
 import com.ghifarix.simulasi_uang.components.DetailLoanItemText as DetailLoanItemText1
 
 @Composable
@@ -49,10 +53,6 @@ fun InvestmentDetailScreen(
     val interstitialAd = viewModel.rewardAd.collectAsState()
     val state = viewModel.state.collectAsState().value
     val context = LocalContext.current
-
-    val adLoader = AdLoader.Builder(context, "").forNativeAd {
-
-    }
 
     LaunchedEffect(key1 = true) {
         viewModel.getInvestment()
@@ -75,84 +75,127 @@ fun InvestmentDetailScreen(
         when (state) {
             InvestmentDetailState.Idle -> {}
             is InvestmentDetailState.Load -> {
-                val investment = state.investment
-                Column(
-                    modifier = Modifier
-                        .padding(it)
-                ) {
-                    Card(
-                        modifier = Modifier
-                            .padding(all = 8.dp)
-                            .fillMaxWidth()
-                            .shadow(1.dp),
-                        colors = CardDefaults.outlinedCardColors(),
-                        border = BorderStroke(1.dp, color = Color.Gray)
-                    ) {
-                        with(investment) {
-                            DetailLoanText(title = "Modal Awal", text = "Rp $baseInvestment")
-                            DetailLoanText(title = "Lama Investasi", text = "$investmentTime")
-                            DetailLoanText(
-                                title = "Penambahan Modal",
-                                text = "Rp $increaseInvestment"
-                            )
-                            DetailLoanText(title = "Lama Penambahan", text = "$increaseTime")
-                            DetailLoanText(title = "Total Investment", text = "Rp $totalInvestment")
-                            DetailLoanText(title = "Investasi Rate", text = "$investmentRate%")
-                            DetailLoanText(title = "Pajak", text = "$tax %")
-                            DetailLoanText(title = "Pertambahan ", text = "$percentageIncrease %")
-                            DetailLoanText(title = "Pertambahan ", text = "Rp $amountIncrease")
-                        }
-                    }
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .fillMaxHeight()
-                            .horizontalScroll(state = rememberScrollState())
-                    ) {
-                        Row(
-                            Modifier
-                                .padding(start = 8.dp, end = 8.dp, bottom = 8.dp)
-                                .background(MaterialTheme.colorScheme.secondary)
-                                .padding(4.dp)
-                        ) {
-                            Text(
-                                text = "Tahun",
-                                modifier = Modifier.width(64.dp),
-                                textAlign = TextAlign.Center,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 20.sp
-                            )
-                            Spacer(modifier = Modifier.width(10.dp))
-                            TitleText(text = "Pertambahan")
-                            Spacer(modifier = Modifier.width(10.dp))
-                            TitleText(text = "Pajak")
-                            Spacer(modifier = Modifier.width(10.dp))
-                            TitleText(text = "Investasi")
-                        }
-                        LazyColumn {
-                            items(state.investment.investmentItem.size) { pos ->
-                                val item = state.investment.investmentItem[pos]
-                                val isLast = pos == state.investment.investmentItem.size - 1
-                                Row(horizontalArrangement = Arrangement.SpaceEvenly) {
-                                    Text(
-                                        text = item.time,
-                                        modifier = Modifier.width(64.dp),
-                                        fontWeight = FontWeight.Bold,
-                                        textAlign = TextAlign.Center
-                                    )
-                                    Spacer(modifier = Modifier.width(15.dp))
-                                    DetailLoanItemText1(
-                                        text = item.investmentIncrease,
-                                        isLast = isLast
-                                    )
-                                    Spacer(modifier = Modifier.width(15.dp))
-                                    DetailLoanItemText1(text = item.tax, isLast = isLast)
-                                    Spacer(modifier = Modifier.width(15.dp))
-                                    DetailLoanItemText1(text = item.investment, isLast = isLast)
-                                    Spacer(modifier = Modifier.width(15.dp))
-                                }
-                            }
-                        }
+                LoadDataSuccess(modifier = Modifier.padding(it), investment = state.investment)
+            }
+        }
+    }
+}
+
+@Composable
+@Preview
+fun LoadDataSuccessPreview() {
+    LoadDataSuccess(investment = Investment())
+}
+
+@Composable
+fun LoadDataSuccess(
+    modifier: Modifier = Modifier,
+    investment: Investment
+) {
+    Column(
+        modifier = modifier
+    ) {
+        Card(
+            modifier = Modifier
+                .padding(all = 8.dp)
+                .fillMaxWidth()
+                .shadow(1.dp),
+            colors = CardDefaults.outlinedCardColors(),
+            border = BorderStroke(1.dp, color = Color.Gray)
+        ) {
+            with(investment) {
+                DetailLoanText(
+                    title = stringResource(id = R.string.initial_capital),
+                    text = "Rp $baseInvestment"
+                )
+                DetailLoanText(
+                    title = stringResource(id = R.string.investment_duration),
+                    text = "$investmentTime ${stringResource(id = R.string.year)}"
+                )
+                DetailLoanText(
+                    text = "Rp $increaseInvestment",
+                    title = stringResource(id = R.string.capital_increase)
+                )
+                DetailLoanText(
+                    title = stringResource(id = R.string.addition_time),
+                    text = "$increaseTime ${stringResource(id = R.string.year)}"
+                )
+                DetailLoanText(
+                    title = stringResource(id = R.string.total_investment),
+                    text = "Rp $totalInvestment"
+                )
+                DetailLoanText(title = "Investasi Rate", text = "$investmentRate%")
+                DetailLoanText(
+                    title = stringResource(id = R.string.tax),
+                    text = "$tax %"
+                )
+                DetailLoanText(
+                    title = stringResource(id = R.string.increase),
+                    text = "$percentageIncrease %"
+                )
+                DetailLoanText(
+                    title = stringResource(id = R.string.increase),
+                    text = "Rp $amountIncrease"
+                )
+            }
+        }
+        BannerAdsView(
+            adSize = AdSize.LARGE_BANNER
+        )
+        Column(
+            modifier = Modifier
+                .padding(top = 8.dp)
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .horizontalScroll(state = rememberScrollState())
+        ) {
+            Row(
+                modifier = Modifier
+                    .padding(start = 8.dp, end = 8.dp, bottom = 8.dp)
+                    .background(MaterialTheme.colorScheme.secondary)
+                    .padding(4.dp),
+                verticalAlignment = Alignment.CenterVertically
+
+            ) {
+                Text(
+                    text = stringResource(id = R.string.year),
+                    modifier = Modifier.width(64.dp),
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 20.sp
+                )
+                Spacer(modifier = Modifier.width(10.dp))
+                TitleText(text = stringResource(id = R.string.increase))
+                Spacer(modifier = Modifier.width(10.dp))
+                TitleText(text = stringResource(id = R.string.tax))
+                Spacer(modifier = Modifier.width(10.dp))
+                TitleText(text = stringResource(id = R.string.capital_increase))
+                Spacer(modifier = Modifier.width(10.dp))
+                TitleText(text = stringResource(id = R.string.investment))
+            }
+            LazyColumn {
+                items(investment.investmentItem.size) { pos ->
+                    val item = investment.investmentItem[pos]
+                    val isLast = pos == investment.investmentItem.size - 1
+                    Row(horizontalArrangement = Arrangement.SpaceEvenly) {
+                        Text(
+                            text = item.time,
+                            modifier = Modifier.width(64.dp),
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center
+                        )
+                        Spacer(modifier = Modifier.width(15.dp))
+                        DetailLoanItemText1(
+                            text = item.investmentIncrease,
+                            isLast = isLast
+                        )
+                        Spacer(modifier = Modifier.width(15.dp))
+                        DetailLoanItemText1(text = item.tax, isLast = isLast)
+                        Spacer(modifier = Modifier.width(15.dp))
+                        DetailLoanItemText1(text = item.increaseCapital, isLast = isLast)
+                        Spacer(modifier = Modifier.width(15.dp))
+                        DetailLoanItemText1(text = item.investment, isLast = isLast)
+                        Spacer(modifier = Modifier.width(15.dp))
                     }
                 }
             }

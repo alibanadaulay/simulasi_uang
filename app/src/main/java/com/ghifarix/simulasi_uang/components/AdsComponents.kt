@@ -3,9 +3,11 @@ package com.ghifarix.simulasi_uang.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.ghifarix.simulasi_uang.BuildConfig
 import com.ghifarix.simulasi_uang.R
@@ -15,6 +17,7 @@ import com.google.android.gms.ads.AdView
 
 @Composable
 fun BannerAdsView(
+    modifier: Modifier = Modifier,
     adSize: AdSize = AdSize.BANNER
 ) {
     val unitId = if (BuildConfig.BUILD_TYPE == "debug") {
@@ -23,7 +26,9 @@ fun BannerAdsView(
         stringResource(id = R.string.ad_mob_banner_id)
     }
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier
+            .height(adSize.height.dp)
+            .fillMaxWidth(),
         horizontalArrangement = Arrangement.Center
     ) {
         AndroidView(

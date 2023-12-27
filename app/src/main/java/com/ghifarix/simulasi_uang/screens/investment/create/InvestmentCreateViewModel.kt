@@ -94,6 +94,7 @@ class InvestmentCreateViewModel @Inject constructor() : ViewModel() {
             var investment = _baseInvestment
             var totalInvestmentIncrease = 0.0
             var totalTax = 0.0
+            var increaseInvestment = 0.0
             val investmentItems = mutableListOf<InvestmentItem>()
             investmentItems.add(
                 InvestmentItem(
@@ -112,13 +113,16 @@ class InvestmentCreateViewModel @Inject constructor() : ViewModel() {
                     investment += _baseInvestmentIncrease
                     totalInvestment += _baseInvestmentIncrease
                     count--
+                    increaseInvestment = _baseInvestmentIncrease
                 }
                 val investmentItem = InvestmentItem(
                     time = (i + 1).toString(),
                     tax = tax.roundOffDecimal(),
                     investment = investment.roundOffDecimal(),
                     investmentIncrease = investmentIncrease.roundOffDecimal(),
+                    increaseCapital = increaseInvestment.roundOffDecimal()
                 )
+                increaseInvestment = 0.0
                 investmentItems.add(investmentItem)
                 i++
             }

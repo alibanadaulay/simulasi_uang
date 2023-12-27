@@ -99,6 +99,19 @@ class MainActivity : ComponentActivity() {
 
                             Divider()
                             NavigationDrawerItem(
+                                label = { Text(text = stringResource(id = R.string.investment)) },
+                                selected = false,
+                                onClick = {
+                                    scope.launch {
+                                        drawerState.close()
+                                    }
+                                    navController.navigate(INVESTMENT_CREATE_ROUTE)
+                                }
+                            )
+                            Divider(
+                                thickness = 2.dp,
+                            )
+                            NavigationDrawerItem(
                                 label = { Text(text = "KPR") },
                                 selected = false,
                                 onClick = {
@@ -118,19 +131,13 @@ class MainActivity : ComponentActivity() {
                                     navController.navigate(PINJOL_CREATE_ROUTE)
                                 }
                             )
-                            NavigationDrawerItem(
-                                label = { Text(text = stringResource(id = R.string.investment)) },
-                                selected = false,
-                                onClick = {
-                                    scope.launch {
-                                        drawerState.close()
-                                    }
-                                    navController.navigate(INVESTMENT_CREATE_ROUTE)
-                                }
-                            )
+
                         }
                     }) {
-                    NavHost(navController = navController, startDestination = KPR_INPUT_ROUTE) {
+                    NavHost(
+                        navController = navController,
+                        startDestination = INVESTMENT_CREATE_ROUTE
+                    ) {
                         kprInputNav(navController = navController, drawerState = drawerState)
                         kprDetailNav(navController = navController)
                         pinjolCreateNav(navController = navController, drawerState = drawerState)

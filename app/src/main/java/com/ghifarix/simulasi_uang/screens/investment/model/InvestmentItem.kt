@@ -5,4 +5,5 @@ data class InvestmentItem(
     val investment: String = "Investasi",
     val tax: String = "0.0",
     val investmentIncrease: String = "0.0",
+    val increaseCapital: String = "0.0"
 )
