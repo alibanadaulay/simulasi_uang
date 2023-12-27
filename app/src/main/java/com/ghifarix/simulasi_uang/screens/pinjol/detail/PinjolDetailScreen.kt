@@ -18,35 +18,33 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Download
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.ghifarix.simulasi_uang.R
 import com.ghifarix.simulasi_uang.SingletonModel
-import com.ghifarix.simulasi_uang.extensions.generatePdf
+import com.ghifarix.simulasi_uang.components.BannerAdsView
+import com.ghifarix.simulasi_uang.components.TopAppBack
+import com.ghifarix.simulasi_uang.model.GeneratePdf
 import com.ghifarix.simulasi_uang.screens.pinjol.model.Pinjol
 import com.ghifarix.simulasi_uang.screens.pinjol.model.PinjolType
+import com.google.android.gms.ads.AdSize
 
 private const val textDp = 150
 
@@ -57,35 +55,33 @@ fun PinjolDetailScreen(kprDetailViewModel: PinjolDetailViewModel, onBack: () -> 
     }
 
     val state = kprDetailViewModel.state.collectAsState().value
+    val rewardedAd = kprDetailViewModel.rewardAds.collectAsState()
     val context = LocalContext.current
+
     Scaffold(topBar = {
-        TopAppBar(title = {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = { onBack() }) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBack,
-                        contentDescription = "back from kpr detail"
-                    )
-                }
-                Text(text = "Detail Angsuran")
-                Spacer(modifier = Modifier.weight(1f))
-                IconButton(onClick = {
-                    context.generatePdf(
-                        pdf = SingletonModel.getInstance().getPdfByPinjol()
-                    )
-                }) {
-                    Icon(
-                        imageVector = Icons.Default.Download,
-                        contentDescription = "download pinjol"
-                    )
+        TopAppBack(
+            context = context,
+            rewardAds = rewardedAd,
+            onBack = onBack,
+            title = stringResource(
+                id = R.string.pinjol_detail
+            ),
+            initAds = kprDetailViewModel::updateRewardAds,
+            generatePdf = GeneratePdf.PINJOL,
+            showingAds = {
+                rewardedAd.value?.show(it) {
+                    SingletonModel.getInstance().generatePdf(GeneratePdf.INVESTASI)
                 }
             }
-        })
+        )
     }) { pads ->
         when (state) {
             is PinjolDetailState.LoadPinjolDetails -> {
                 Column(modifier = Modifier.padding(pads)) {
                     ShowDetail(pinjol = state.pinjol)
+                    BannerAdsView(
+                        adSize = AdSize.LARGE_BANNER,
+                    )
                     ShowList(pinjol = state.pinjol)
                 }
             }
@@ -102,6 +98,7 @@ fun PinjolDetailScreen(kprDetailViewModel: PinjolDetailViewModel, onBack: () -> 
 private fun ShowList(pinjol: Pinjol) {
     Column(
         modifier = Modifier
+            .padding(top = 10.dp)
             .fillMaxWidth()
             .fillMaxHeight()
             .horizontalScroll(state = rememberScrollState())

@@ -15,4 +15,7 @@
     <string name="tax">Pajak</string>
     <string name="year">Tahun</string>
     <string name="increase">Pertambahan</string>
+    <string name="pinjol_detail">Pinjol Detail</string>
+    <string name="kpr_detail">Kpr Detail</string>
+    <string name="file_name">Nama file</string>
 </resources>

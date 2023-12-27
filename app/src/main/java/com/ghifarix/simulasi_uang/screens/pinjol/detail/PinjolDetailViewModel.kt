@@ -1,11 +1,10 @@
 package com.ghifarix.simulasi_uang.screens.pinjol.detail
 
-import android.graphics.Bitmap
-import android.graphics.pdf.PdfDocument
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ghifarix.simulasi_uang.SingletonModel
 import com.ghifarix.simulasi_uang.screens.pinjol.model.Pinjol
+import com.google.android.gms.ads.rewarded.RewardedAd
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,6 +15,8 @@ import javax.inject.Inject
 class PinjolDetailViewModel @Inject constructor() : ViewModel() {
     private val _state = MutableStateFlow<PinjolDetailState>(PinjolDetailState.Idle)
     val state: StateFlow<PinjolDetailState> = _state
+    private val _rewardAds = MutableStateFlow<RewardedAd?>(null)
+    val rewardAds: StateFlow<RewardedAd?> = _rewardAds
     private var _pinjol: Pinjol? = null
 
     fun getPinjol() {
@@ -29,13 +30,9 @@ class PinjolDetailViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun generatePdf() {
+    fun updateRewardAds(rewardedAd: RewardedAd?) {
         viewModelScope.launch {
-            val pdfDocument = PdfDocument()
-            var pageHeight = 1120
-            var pageWidth = 792
-            lateinit var bmp: Bitmap
-            lateinit var scaledbmp: Bitmap
+            _rewardAds.value = rewardedAd
         }
     }
 }

@@ -177,5 +177,5 @@ fun Context.generatePdf(pdf: Pdf? = SingletonModel.getInstance().getPdf()): Stri
         return null
     }
     pdfDocument.close()
-    return file.absolutePath
+    return date.toString()
 }

@@ -50,7 +50,7 @@ fun InvestmentDetailScreen(
     onBack: () -> Unit = {}
 ) {
 
-    val interstitialAd = viewModel.rewardAd.collectAsState()
+    val rewardAds = viewModel.rewardAd.collectAsState()
     val state = viewModel.state.collectAsState().value
     val context = LocalContext.current
 
@@ -61,13 +61,13 @@ fun InvestmentDetailScreen(
     Scaffold(topBar = {
         TopAppBack(
             context = context,
-            interstitialAd = interstitialAd,
+            rewardAds = rewardAds,
             title = stringResource(id = R.string.investment_detail_title),
             onBack = onBack,
-            initAds = viewModel::updateInterstitialAds,
+            initAds = viewModel::updateRewardAds,
             generatePdf = GeneratePdf.INVESTASI,
             showingAds = {
-                interstitialAd.value?.show(it) {
+                rewardAds.value?.show(it) {
                     SingletonModel.getInstance().generatePdf(GeneratePdf.INVESTASI)
                 }
             })

@@ -18,7 +18,7 @@ class InvestmentDetailViewModel @Inject constructor() : ViewModel() {
     private val _rewardAd = MutableStateFlow<RewardedAd?>(null)
     val rewardAd: StateFlow<RewardedAd?> = _rewardAd
 
-    fun updateInterstitialAds(rewardAd: RewardedAd?) {
+    fun updateRewardAds(rewardAd: RewardedAd?) {
         viewModelScope.launch {
             _rewardAd.value = rewardAd
         }

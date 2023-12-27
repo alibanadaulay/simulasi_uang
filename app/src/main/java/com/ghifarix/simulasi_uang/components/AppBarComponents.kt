@@ -50,7 +50,7 @@ fun TopAppBack(
     context: Context,
     title: String = "title",
     onBack: () -> Unit = {},
-    interstitialAd: State<RewardedAd?>,
+    rewardAds: State<RewardedAd?>,
     initAds: (RewardedAd?) -> Unit = {},
     showingAds: (Activity) -> Unit = {},
     generatePdf: GeneratePdf = GeneratePdf.KPR
@@ -84,7 +84,7 @@ fun TopAppBack(
 
                 override fun onAdShowedFullScreenContent() {
                     Log.d(tag, "Ad showed fullscreen content.");
-//                    SingletonModel.getInstance().generatePdf(generatePdf)
+                    SingletonModel.getInstance().generatePdf(generatePdf)
                 }
             }
         }
@@ -102,7 +102,7 @@ fun TopAppBack(
             Text(text = title)
             Spacer(modifier = Modifier.weight(1f))
             IconButton(onClick = {
-                if (interstitialAd.value == null) {
+                if (rewardAds.value == null) {
                     SingletonModel.getInstance().generatePdf(GeneratePdf.KPR)
                     val result = context.generatePdf()
                     if (result != null) {
