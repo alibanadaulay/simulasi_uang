@@ -63,10 +63,7 @@ fun TopAppBack(
                 override fun onAdDismissedFullScreenContent() {
                     Log.d(tag, "Ad dismissed fullscreen content.");
                     initAds(it)
-                    val result = context.generatePdf()
-                    if (result != null) {
-                        Toast.makeText(context, result, Toast.LENGTH_SHORT).show()
-                    }
+                    toastGeneratePdfSuccess(context)
                 }
 
                 override fun onAdFailedToShowFullScreenContent(adError: AdError) {
@@ -84,7 +81,8 @@ fun TopAppBack(
 
                 override fun onAdShowedFullScreenContent() {
                     Log.d(tag, "Ad showed fullscreen content.");
-                    SingletonModel.getInstance().generatePdf(generatePdf)
+                    SingletonModel.getInstance()
+                        .generatePdf(context = context, generatePdf = generatePdf)
                 }
             }
         }
@@ -103,7 +101,8 @@ fun TopAppBack(
             Spacer(modifier = Modifier.weight(1f))
             IconButton(onClick = {
                 if (rewardAds.value == null) {
-                    SingletonModel.getInstance().generatePdf(GeneratePdf.KPR)
+                    SingletonModel.getInstance()
+                        .generatePdf(context = context, generatePdf = GeneratePdf.KPR)
                     val result = context.generatePdf()
                     if (result != null) {
                         Toast.makeText(context, result, Toast.LENGTH_SHORT).show()

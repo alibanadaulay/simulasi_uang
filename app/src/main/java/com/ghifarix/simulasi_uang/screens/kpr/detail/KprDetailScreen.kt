@@ -35,13 +35,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ghifarix.simulasi_uang.R
-import com.ghifarix.simulasi_uang.SingletonModel
 import com.ghifarix.simulasi_uang.components.BannerAdsView
 import com.ghifarix.simulasi_uang.components.DetailLoanItemText
 import com.ghifarix.simulasi_uang.components.TitleText
 import com.ghifarix.simulasi_uang.components.TopAppBack
-import com.ghifarix.simulasi_uang.components.toastGeneratePdfSuccess
-import com.ghifarix.simulasi_uang.extensions.generatePdf
 import com.ghifarix.simulasi_uang.model.GeneratePdf
 import com.ghifarix.simulasi_uang.screens.kpr.model.Kpr
 import com.google.android.gms.ads.AdSize
@@ -67,10 +64,7 @@ fun KprDetailScreen(kprDetailViewModel: KprDetailViewModel, onBack: () -> Unit =
             title = stringResource(id = R.string.kpr_detail),
             generatePdf = GeneratePdf.KPR,
             showingAds = {
-                rewardedAd.value?.show(it) {
-                    val fileName = context.generatePdf(pdf = SingletonModel.getInstance().getPdf())
-                    toastGeneratePdfSuccess(context = context, fileName = fileName)
-                }
+                rewardedAd.value?.show(it) {}
             }
         )
     }) { pads ->

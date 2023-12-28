@@ -34,13 +34,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ghifarix.simulasi_uang.R
-import com.ghifarix.simulasi_uang.SingletonModel
 import com.ghifarix.simulasi_uang.components.BannerAdsView
 import com.ghifarix.simulasi_uang.components.DetailLoanText
 import com.ghifarix.simulasi_uang.components.TitleText
 import com.ghifarix.simulasi_uang.components.TopAppBack
 import com.ghifarix.simulasi_uang.model.GeneratePdf
 import com.ghifarix.simulasi_uang.screens.investment.model.Investment
+import com.ghifarix.simulasi_uang.screens.investment.model.InvestmentItem
 import com.google.android.gms.ads.AdSize
 import com.ghifarix.simulasi_uang.components.DetailLoanItemText as DetailLoanItemText1
 
@@ -68,12 +68,16 @@ fun InvestmentDetailScreen(
             generatePdf = GeneratePdf.INVESTASI,
             showingAds = {
                 rewardAds.value?.show(it) {
-                    SingletonModel.getInstance().generatePdf(GeneratePdf.INVESTASI)
+
                 }
+
             })
     }) {
         when (state) {
-            InvestmentDetailState.Idle -> {}
+            InvestmentDetailState.Idle -> {
+
+            }
+
             is InvestmentDetailState.Load -> {
                 LoadDataSuccess(modifier = Modifier.padding(it), investment = state.investment)
             }
@@ -142,61 +146,66 @@ fun LoadDataSuccess(
         BannerAdsView(
             adSize = AdSize.LARGE_BANNER
         )
-        Column(
-            modifier = Modifier
-                .padding(top = 8.dp)
-                .fillMaxWidth()
-                .fillMaxHeight()
-                .horizontalScroll(state = rememberScrollState())
-        ) {
-            Row(
-                modifier = Modifier
-                    .padding(start = 8.dp, end = 8.dp, bottom = 8.dp)
-                    .background(MaterialTheme.colorScheme.secondary)
-                    .padding(4.dp),
-                verticalAlignment = Alignment.CenterVertically
+        ShowListInvestmentItems(investmentList = investment.investmentItem)
+    }
+}
 
-            ) {
-                Text(
-                    text = stringResource(id = R.string.year),
-                    modifier = Modifier.width(64.dp),
-                    textAlign = TextAlign.Center,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
-                )
-                Spacer(modifier = Modifier.width(10.dp))
-                TitleText(text = stringResource(id = R.string.increase))
-                Spacer(modifier = Modifier.width(10.dp))
-                TitleText(text = stringResource(id = R.string.tax))
-                Spacer(modifier = Modifier.width(10.dp))
-                TitleText(text = stringResource(id = R.string.capital_increase))
-                Spacer(modifier = Modifier.width(10.dp))
-                TitleText(text = stringResource(id = R.string.investment))
-            }
-            LazyColumn {
-                items(investment.investmentItem.size) { pos ->
-                    val item = investment.investmentItem[pos]
-                    val isLast = pos == investment.investmentItem.size - 1
-                    Row(horizontalArrangement = Arrangement.SpaceEvenly) {
-                        Text(
-                            text = item.time,
-                            modifier = Modifier.width(64.dp),
-                            fontWeight = FontWeight.Bold,
-                            textAlign = TextAlign.Center
-                        )
-                        Spacer(modifier = Modifier.width(15.dp))
-                        DetailLoanItemText1(
-                            text = item.investmentIncrease,
-                            isLast = isLast
-                        )
-                        Spacer(modifier = Modifier.width(15.dp))
-                        DetailLoanItemText1(text = item.tax, isLast = isLast)
-                        Spacer(modifier = Modifier.width(15.dp))
-                        DetailLoanItemText1(text = item.increaseCapital, isLast = isLast)
-                        Spacer(modifier = Modifier.width(15.dp))
-                        DetailLoanItemText1(text = item.investment, isLast = isLast)
-                        Spacer(modifier = Modifier.width(15.dp))
-                    }
+@Composable
+fun ShowListInvestmentItems(investmentList: List<InvestmentItem>) {
+    Column(
+        modifier = Modifier
+            .padding(top = 8.dp)
+            .fillMaxWidth()
+            .fillMaxHeight()
+            .horizontalScroll(state = rememberScrollState())
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(start = 8.dp, end = 8.dp, bottom = 8.dp)
+                .background(MaterialTheme.colorScheme.secondary)
+                .padding(4.dp),
+            verticalAlignment = Alignment.CenterVertically
+
+        ) {
+            Text(
+                text = stringResource(id = R.string.year),
+                modifier = Modifier.width(64.dp),
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp
+            )
+            Spacer(modifier = Modifier.width(10.dp))
+            TitleText(text = stringResource(id = R.string.increase))
+            Spacer(modifier = Modifier.width(10.dp))
+            TitleText(text = stringResource(id = R.string.tax))
+            Spacer(modifier = Modifier.width(10.dp))
+            TitleText(text = stringResource(id = R.string.capital_increase))
+            Spacer(modifier = Modifier.width(10.dp))
+            TitleText(text = stringResource(id = R.string.investment))
+        }
+        LazyColumn {
+            items(investmentList.size) { pos ->
+                val item = investmentList[pos]
+                val isLast = pos == investmentList.size - 1
+                Row(horizontalArrangement = Arrangement.SpaceEvenly) {
+                    Text(
+                        text = item.time,
+                        modifier = Modifier.width(64.dp),
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(modifier = Modifier.width(15.dp))
+                    DetailLoanItemText1(
+                        text = item.investmentIncrease,
+                        isLast = isLast
+                    )
+                    Spacer(modifier = Modifier.width(15.dp))
+                    DetailLoanItemText1(text = item.tax, isLast = isLast)
+                    Spacer(modifier = Modifier.width(15.dp))
+                    DetailLoanItemText1(text = item.increaseCapital, isLast = isLast)
+                    Spacer(modifier = Modifier.width(15.dp))
+                    DetailLoanItemText1(text = item.investment, isLast = isLast)
+                    Spacer(modifier = Modifier.width(15.dp))
                 }
             }
         }

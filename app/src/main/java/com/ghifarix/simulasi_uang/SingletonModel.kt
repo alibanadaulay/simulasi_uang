@@ -1,5 +1,6 @@
 package com.ghifarix.simulasi_uang
 
+import android.content.Context
 import com.ghifarix.simulasi_uang.model.GeneratePdf
 import com.ghifarix.simulasi_uang.model.Pdf
 import com.ghifarix.simulasi_uang.model.PdfItem
@@ -46,9 +47,9 @@ class SingletonModel {
     }
 
     fun getInvestment() = _investment
-    fun generatePdf(generatePdf: GeneratePdf) {
+    fun generatePdf(context: Context, generatePdf: GeneratePdf) {
         _pdf = when (generatePdf) {
-            GeneratePdf.KPR -> getPdfByKpr()
+            GeneratePdf.KPR -> getPdfByKpr(context = context)
             GeneratePdf.PINJOL -> getPdfByPinjol()
             GeneratePdf.INVESTASI -> getPdfByPinjol()
         }
@@ -84,13 +85,13 @@ class SingletonModel {
         return Pdf(model = map, items = items)
     }
 
-    fun getPdfByKpr(): Pdf {
+    fun getPdfByKpr(context: Context): Pdf {
         val map = mutableMapOf<String, String>()
         val items: MutableList<PdfItem> = mutableListOf()
         _kpr?.let {
-            map["Jenis Angsuran"] = it.installmentsType.name
-            map["Pinjaman"] = "Rp ${it.totalLoan}"
-            map["Biaya Layanan (${it.dp})"] = "Rp ${it.dpAmount}"
+            map[context.getString(R.string.installment_type)] = it.installmentsType.name
+            map[context.getString(R.string.loan)] = "Rp ${it.totalLoan}"
+            map["${context.getString(R.string.service_fee)} (${it.dp})"] = "Rp ${it.dpAmount}"
             map["Pinjaman Dibayar"] = "Rp ${it.loanToPay}"
             map["Bunga (Riba)"] = it.interest.toString()
             map["Lama Pinjaman (Tahun)"] = it.years.toString()
@@ -111,4 +112,6 @@ class SingletonModel {
         }
         return Pdf(model = map, items = items)
     }
+
+
 }

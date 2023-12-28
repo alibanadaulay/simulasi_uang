@@ -38,7 +38,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ghifarix.simulasi_uang.R
-import com.ghifarix.simulasi_uang.SingletonModel
 import com.ghifarix.simulasi_uang.components.BannerAdsView
 import com.ghifarix.simulasi_uang.components.TopAppBack
 import com.ghifarix.simulasi_uang.model.GeneratePdf
@@ -69,9 +68,7 @@ fun PinjolDetailScreen(kprDetailViewModel: PinjolDetailViewModel, onBack: () -> 
             initAds = kprDetailViewModel::updateRewardAds,
             generatePdf = GeneratePdf.PINJOL,
             showingAds = {
-                rewardedAd.value?.show(it) {
-                    SingletonModel.getInstance().generatePdf(GeneratePdf.INVESTASI)
-                }
+                rewardedAd.value?.show(it) {}
             }
         )
     }) { pads ->
