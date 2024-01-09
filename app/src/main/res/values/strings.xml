@@ -35,4 +35,7 @@
     <string name="monthly">Bulanan</string>
     <string name="daily">Harian</string>
     <string name="subscription_fee">Biaya Langanan</string>
+    <string name="mortage">KPR</string>
+    <string name="debt_duration">Lama Hutang</string>
+    <string name="riba">Riba</string>
 </resources>

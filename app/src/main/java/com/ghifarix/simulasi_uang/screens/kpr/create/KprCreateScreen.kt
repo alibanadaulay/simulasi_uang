@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.ghifarix.simulasi_uang.screens.kpr.create
 
 import androidx.compose.foundation.layout.Arrangement
@@ -15,7 +13,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.Money
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -27,8 +24,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.ghifarix.simulasi_uang.R
 import com.ghifarix.simulasi_uang.components.BannerAdsView
 import com.ghifarix.simulasi_uang.components.BaseLoan
 import com.ghifarix.simulasi_uang.components.SubmitButton
@@ -56,7 +55,7 @@ fun KprInputScreen(
     Scaffold(
         topBar = {
             TopAppBarHamburgerMenu(
-                title = "KPR",
+                title = stringResource(id = R.string.mortage),
                 onClickHamburger = onClickHamburger
             )
         }
@@ -74,12 +73,12 @@ fun KprInputScreen(
                 TextFieldCustom(
                     modifier = modifier,
                     icon = Icons.Default.CalendarToday,
-                    label = "Lama Pinjaman (Tahun)",
+                    label = "${stringResource(id = R.string.debt_duration)} (${stringResource(id = R.string.year)})",
                     onTextChanged = kprCreateViewModel::updateYears
                 )
                 TextFieldCustom(
                     modifier = modifier,
-                    label = "Bunga (Riba)",
+                    label = "${stringResource(id = R.string.interest)} (${stringResource(id = R.string.riba)})",
                     onTextChanged = kprCreateViewModel::updateRate
                 )
             }
@@ -102,7 +101,7 @@ fun KprInputScreen(
             KprType(onClickType = kprCreateViewModel::updateKprType)
             SubmitButton(
                 onClick = kprCreateViewModel::calculate,
-                text = "Hitung"
+                text = stringResource(id = R.string.calculate)
             )
             Spacer(modifier = Modifier.weight(1f))
             BannerAdsView()

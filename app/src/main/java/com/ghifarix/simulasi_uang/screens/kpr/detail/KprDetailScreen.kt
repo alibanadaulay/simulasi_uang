@@ -100,20 +100,20 @@ private fun ShowList(kpr: Kpr) {
                 .padding(4.dp)
         ) {
             Text(
-                text = "Bulan",
+                text = stringResource(id = R.string.month),
                 modifier = Modifier.width(64.dp),
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp
             )
             Spacer(modifier = Modifier.width(10.dp))
-            TitleText(text = "Bunga")
+            TitleText(text = stringResource(id = R.string.interest))
             Spacer(modifier = Modifier.width(10.dp))
-            TitleText(text = "Pokok")
+            TitleText(text = stringResource(id = R.string.capital))
             Spacer(modifier = Modifier.width(10.dp))
-            TitleText(text = "Angsuran")
+            TitleText(text = stringResource(id = R.string.installment))
             Spacer(modifier = Modifier.width(10.dp))
-            TitleText(text = "Sisa Hutang")
+            TitleText(text = stringResource(id = R.string.remaining_debt))
         }
         LazyColumn(content = {
             items(kpr.kprItems.size) {
