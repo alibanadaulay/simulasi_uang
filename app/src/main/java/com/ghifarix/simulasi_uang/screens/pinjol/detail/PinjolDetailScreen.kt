@@ -39,6 +39,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ghifarix.simulasi_uang.R
 import com.ghifarix.simulasi_uang.components.BannerAdsView
+import com.ghifarix.simulasi_uang.components.DetailLoanItemText
+import com.ghifarix.simulasi_uang.components.DetailLoanText
 import com.ghifarix.simulasi_uang.components.TopAppBack
 import com.ghifarix.simulasi_uang.model.GeneratePdf
 import com.ghifarix.simulasi_uang.screens.pinjol.model.Pinjol
@@ -107,20 +109,20 @@ private fun ShowList(pinjol: Pinjol) {
                 .padding(4.dp)
         ) {
             Text(
-                text = if (pinjol.installmentsType == PinjolType.Harian) "Hari" else "Bulan",
+                text = stringResource(id = if (pinjol.installmentsType == PinjolType.Harian) R.string.day else R.string.month),
                 modifier = Modifier.width(64.dp),
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp
             )
             Spacer(modifier = Modifier.width(10.dp))
-            TitleText(text = "Bunga")
+            TitleText(text = stringResource(id = R.string.interest))
             Spacer(modifier = Modifier.width(10.dp))
-            TitleText(text = "Pokok")
+            TitleText(text = stringResource(id = R.string.capital))
             Spacer(modifier = Modifier.width(10.dp))
-            TitleText(text = "Angsuran")
+            TitleText(text = stringResource(id = R.string.installment))
             Spacer(modifier = Modifier.width(10.dp))
-            TitleText(text = "Sisa Hutang")
+            TitleText(text = stringResource(id = R.string.remaining_debt))
         }
         LazyColumn(content = {
             items(pinjol.pinjolItems.size) {
@@ -182,32 +184,6 @@ private fun ShowDetail(pinjol: Pinjol = Pinjol()) {
         )
     }
 }
-
-@Composable
-private fun DetailLoanText(title: String, text: String) {
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 8.dp, end = 8.dp, top = 2.dp, bottom = 2.dp)
-    ) {
-        Text(text = title, fontWeight = FontWeight.Normal, fontSize = 16.sp)
-        Spacer(modifier = Modifier.weight(1f))
-        Text(text = text, fontWeight = FontWeight.Bold, fontSize = 18.sp)
-    }
-}
-
-@Composable
-private fun DetailLoanItemText(text: String, isLast: Boolean) {
-    val fontWeight = if (isLast) FontWeight.Bold else FontWeight.Light
-    Text(
-        modifier = Modifier.width(textDp.dp),
-        text = text,
-        fontWeight = fontWeight,
-        textAlign = TextAlign.Center,
-        fontSize = 16.sp
-    )
-}
-
 @Composable
 private fun TitleText(text: String) {
     Text(

@@ -39,11 +39,11 @@ fun InvestmentCreateScreen(
             title = stringResource(id = R.string.investment),
             onClickHamburger = onClickHamburger
         )
-    }) { padd ->
-        Column(modifier = Modifier.padding(padd)) {
+    }) { topPadding ->
+        Column(modifier = Modifier.padding(topPadding)) {
             BaseLoan(
                 onTextChanged = vm::updateBaseLoan,
-                label = "Modal Awal"
+                label = stringResource(id = R.string.base_capital)
             )
             Row(horizontalArrangement = Arrangement.SpaceEvenly) {
                 val modifier = Modifier
@@ -52,12 +52,12 @@ fun InvestmentCreateScreen(
                 TextFieldCustom(
                     modifier = modifier,
                     icon = Icons.Default.CalendarToday,
-                    label = "Pajak (10%)",
+                    label = "${stringResource(id = R.string.tax)} %",
                     onTextChanged = vm::updateTax
                 )
                 TextFieldCustom(
                     modifier = modifier,
-                    label = "Pertambahan %",
+                    label = "${stringResource(id = R.string.increase)} %",
                     onTextChanged = vm::updateInvestment
                 )
             }
@@ -67,12 +67,12 @@ fun InvestmentCreateScreen(
                 BaseLoan(
                     modifier = modifier.weight(0.65f),
                     onTextChanged = vm::updateInvestmentIncrease,
-                    label = "Tambahkan Model"
+                    label = stringResource(id = R.string.capital_increase)
                 )
                 TextFieldCustom(
                     modifier = modifier.weight(0.35f),
                     onTextChanged = vm::updateIncreaseYear,
-                    label = "Tahun",
+                    label = stringResource(id = R.string.year),
                     icon = Icons.Default.CalendarToday
                 )
             }
@@ -81,12 +81,12 @@ fun InvestmentCreateScreen(
                     .fillMaxWidth()
                     .padding(all = 8.dp),
                 icon = Icons.Default.CalendarToday,
-                label = "Lama investasi (Tahun)",
+                label = "${stringResource(id = R.string.investment_duration)} (${stringResource(id = R.string.year)})",
                 onTextChanged = vm::updateYears
             )
             SubmitButton(
                 onClick = vm::calculate,
-                text = "Hitung"
+                text = stringResource(id = R.string.calculate),
             )
             Spacer(modifier = Modifier.weight(1f))
             BannerAdsView()

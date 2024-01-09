@@ -224,4 +224,17 @@ fun DetailLoanText(title: String = "title", text: String = "description") {
     }
 }
 
+@Composable
+fun DetailLoanTextCurrency(title: String = "title", text: String = "amount") {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 8.dp, end = 8.dp, top = 2.dp, bottom = 2.dp)
+    ) {
+        Text(text = title, fontWeight = FontWeight.Normal, fontSize = 16.sp)
+        Spacer(modifier = Modifier.weight(1f))
+        Text(text = text, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+    }
+}
+
 

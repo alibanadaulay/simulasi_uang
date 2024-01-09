@@ -21,4 +21,18 @@
     <string name="installment_type">Jenis Angsuran</string>
     <string name="loan">Pinjaman</string>
     <string name="service_fee">Biaya Layanan</string>
+    <string name="day">Hari</string>
+    <string name="month">Bulan</string>
+    <string name="interest">Bunga</string>
+    <string name="capital">Pokok</string>
+    <string name="installment">Angsuran</string>
+    <string name="remaining_debt">Sisa Hutang</string>
+    <string name="calculate">Hitung</string>
+    <string name="base_capital">Modal Awal</string>
+    <string name="pinjol">Pinjaman Online</string>
+    <string name="daily_investment">Bunga Harian</string>
+    <string name="monthly_interest">Bunga Bulanan</string>
+    <string name="monthly">Bulanan</string>
+    <string name="daily">Harian</string>
+    <string name="subscription_fee">Biaya Langanan</string>
 </resources>

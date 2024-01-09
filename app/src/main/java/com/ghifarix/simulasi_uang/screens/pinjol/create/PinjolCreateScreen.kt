@@ -31,7 +31,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.ghifarix.simulasi_uang.R
 import com.ghifarix.simulasi_uang.components.BannerAdsView
 import com.ghifarix.simulasi_uang.components.BaseLoan
 import com.ghifarix.simulasi_uang.components.SubmitButton
@@ -58,7 +60,7 @@ fun PinjolCreateScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Pinjol") },
+                title = { Text(text = stringResource(id = R.string.pinjol)) },
                 navigationIcon = {
                     IconButton(onClick = { onClickHamburger() }) {
                         Icon(
@@ -83,7 +85,7 @@ fun PinjolCreateScreen(
                 )
                 TextFieldCustom(
                     modifier = modifier.weight(0.5f),
-                    label = "Biaya Langganan",
+                    label = stringResource(id = R.string.subscription_fee),
                     maxInterest = 15.0,
                     onTextChanged = pinjolCreateViewModel::updateServiceCostInterest
                 )
@@ -96,7 +98,7 @@ fun PinjolCreateScreen(
                         .weight(0.3f)
                         .fillMaxWidth(),
                     maxLength = 3,
-                    label = "Lama Pinjaman",
+                    label = stringResource(id = R.string.investment_duration),
                     icon = Icons.Default.CalendarToday,
                     onTextChanged = pinjolCreateViewModel::updateLoanTime
                 )
@@ -106,7 +108,7 @@ fun PinjolCreateScreen(
                             .padding(all = 8.dp)
                             .weight(0.7f)
                             .fillMaxWidth(),
-                        label = "Bunga Harian",
+                        label = stringResource(id = R.string.daily_investment),
                         icon = Icons.Default.Percent,
                         maxInterest = 0.4,
                         onTextChanged = pinjolCreateViewModel::updateInterest
@@ -117,7 +119,7 @@ fun PinjolCreateScreen(
                             .padding(all = 8.dp)
                             .weight(0.7f)
                             .fillMaxWidth(),
-                        label = "Bunga Bulanan",
+                        label = stringResource(id = R.string.monthly_interest),
                         icon = Icons.Default.Percent,
                         maxInterest = 9.0,
                         onTextChanged = pinjolCreateViewModel::updateInterest
@@ -126,7 +128,7 @@ fun PinjolCreateScreen(
             }
             SubmitButton(
                 onClick = pinjolCreateViewModel::submit,
-                text = "Hitung"
+                text = stringResource(id = R.string.calculate)
             )
             Spacer(modifier = Modifier.weight(1f))
             BannerAdsView()
@@ -157,7 +159,7 @@ private fun PinjolType(
             shape = RoundedCornerShape(8.dp)
         ) {
             Text(
-                text = PinjolType.Harian.name,
+                text = stringResource(id = R.string.daily),
             )
         }
         Spacer(modifier = Modifier.width(2.dp))
@@ -174,7 +176,7 @@ private fun PinjolType(
             shape = RoundedCornerShape(8.dp)
         ) {
             Text(
-                text = PinjolType.Bulanan.name,
+                text = stringResource(id = R.string.monthly),
             )
         }
         Spacer(modifier = Modifier.width(2.dp))
