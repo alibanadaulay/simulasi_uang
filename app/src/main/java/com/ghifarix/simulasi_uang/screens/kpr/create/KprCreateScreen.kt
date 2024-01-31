@@ -55,7 +55,7 @@ fun KprInputScreen(
     Scaffold(
         topBar = {
             TopAppBarHamburgerMenu(
-                title = stringResource(id = R.string.mortage),
+                title = stringResource(id = R.string.mortgage),
                 onClickHamburger = onClickHamburger
             )
         }

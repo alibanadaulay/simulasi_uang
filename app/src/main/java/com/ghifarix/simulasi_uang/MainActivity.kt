@@ -112,7 +112,7 @@ class MainActivity : ComponentActivity() {
                                 thickness = 2.dp,
                             )
                             NavigationDrawerItem(
-                                label = { Text(text = "KPR") },
+                                label = { Text(text = stringResource(id = R.string.mortgage)) },
                                 selected = false,
                                 onClick = {
                                     scope.launch {
@@ -122,7 +122,7 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                             NavigationDrawerItem(
-                                label = { Text(text = "Pinjol") },
+                                label = { Text(text = stringResource(id = R.string.pinjol)) },
                                 selected = false,
                                 onClick = {
                                     scope.launch {

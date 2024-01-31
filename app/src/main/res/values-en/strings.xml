@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">Money Simulation</string>
+
+    <string name="investment">Investment</string>
+    <string name="investment_detail_title">Detail Investment</string>
+    <string name="initial_capital">Initial Capital</string>
+    <string name="investment_duration">Investment Duration</string>
+    <string name="capital_increase">Capital Increase</string>
+    <string name="addition_time">Addition Time</string>
+    <string name="total_investment">Total Investment</string>
+    <string name="tax">Tax</string>
+    <string name="year">Year</string>
+    <string name="increase">Increase</string>
+    <string name="pinjol_detail">Online Loan Detail</string>
+    <string name="kpr_detail">Mortgage Detail</string>
+    <string name="file_name">File Name</string>
+    <string name="installment_type">Installment Type</string>
+    <string name="loan">Loan</string>
+    <string name="service_fee">Service Fee</string>
+    <string name="day">Day</string>
+    <string name="month">Month</string>
+    <string name="interest">Interest</string>
+    <string name="capital">Capital</string>
+    <string name="installment">Installment</string>
+    <string name="remaining_debt">Remaining Debt</string>
+    <string name="calculate">Calculate</string>
+    <string name="base_capital">Base Capital</string>
+    <string name="pinjol">Online Loan</string>
+    <string name="daily_interest">Daily Interest</string>
+    <string name="monthly_interest">Monthly Interest</string>
+    <string name="monthly">Monthly</string>
+    <string name="daily">Daily</string>
+    <string name="subscription_fee">Subscription Fee</string>
+    <string name="mortgage">Mortgage</string>
+    <string name="debt_duration">Debt Duration</string>
+    <string name="riba">Usury</string>
+</resources>

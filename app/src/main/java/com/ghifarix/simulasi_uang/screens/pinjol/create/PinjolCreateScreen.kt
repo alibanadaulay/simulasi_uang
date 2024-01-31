@@ -108,7 +108,7 @@ fun PinjolCreateScreen(
                             .padding(all = 8.dp)
                             .weight(0.7f)
                             .fillMaxWidth(),
-                        label = stringResource(id = R.string.daily_investment),
+                        label = stringResource(id = R.string.daily_interest),
                         icon = Icons.Default.Percent,
                         maxInterest = 0.4,
                         onTextChanged = pinjolCreateViewModel::updateInterest
