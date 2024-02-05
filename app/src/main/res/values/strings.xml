@@ -7,6 +7,7 @@
     <string name="capital_increase">Penambahan Modal</string>
     <string name="addition_time">Lama Penambahan</string>
     <string name="total_investment">Total Investasi</string>
+    <string name="down_payment">Uang Muka</string>
     <string name="tax">Pajak</string>
     <string name="year">Tahun</string>
     <string name="increase">Pertambahan</string>
@@ -33,6 +34,10 @@
     <string name="mortgage">KPR</string>
     <string name="debt_duration">Lama Hutang</string>
     <string name="riba">Riba</string>
+    <string name="annuity">Anuitas</string>
+    <string name="flat">Flat</string>
+    <string name="effective">Efektif</string>
+    <string name="return_rate">Pertambahan</string>
 
 
     // ad_mob_id

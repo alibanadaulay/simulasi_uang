@@ -74,9 +74,7 @@ fun InvestmentDetailScreen(
             })
     }) {
         when (state) {
-            InvestmentDetailState.Idle -> {
-
-            }
+            InvestmentDetailState.Idle -> {}
 
             is InvestmentDetailState.Load -> {
                 LoadDataSuccess(modifier = Modifier.padding(it), investment = state.investment)
@@ -110,14 +108,14 @@ fun LoadDataSuccess(
             with(investment) {
                 DetailLoanText(
                     title = stringResource(id = R.string.initial_capital),
-                    text = "Rp $baseInvestment"
+                    text = baseInvestment
                 )
                 DetailLoanText(
                     title = stringResource(id = R.string.investment_duration),
                     text = "$investmentTime ${stringResource(id = R.string.year)}"
                 )
                 DetailLoanText(
-                    text = "Rp $increaseInvestment",
+                    text = increaseInvestment,
                     title = stringResource(id = R.string.capital_increase)
                 )
                 DetailLoanText(
@@ -126,7 +124,7 @@ fun LoadDataSuccess(
                 )
                 DetailLoanText(
                     title = stringResource(id = R.string.total_investment),
-                    text = "Rp $totalInvestment"
+                    text = totalInvestment
                 )
                 DetailLoanText(title = "Investasi Rate", text = "$investmentRate%")
                 DetailLoanText(
@@ -139,7 +137,7 @@ fun LoadDataSuccess(
                 )
                 DetailLoanText(
                     title = stringResource(id = R.string.increase),
-                    text = "Rp $amountIncrease"
+                    text = amountIncrease
                 )
             }
         }

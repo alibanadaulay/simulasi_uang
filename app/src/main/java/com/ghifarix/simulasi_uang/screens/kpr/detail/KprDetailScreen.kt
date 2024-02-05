@@ -41,6 +41,7 @@ import com.ghifarix.simulasi_uang.components.TitleText
 import com.ghifarix.simulasi_uang.components.TopAppBack
 import com.ghifarix.simulasi_uang.model.GeneratePdf
 import com.ghifarix.simulasi_uang.screens.kpr.model.Kpr
+import com.ghifarix.simulasi_uang.screens.kpr.model.getTitle
 import com.google.android.gms.ads.AdSize
 
 
@@ -156,12 +157,11 @@ private fun ShowDetail(kpr: Kpr = Kpr()) {
         border = BorderStroke(1.dp, color = Color.Gray)
     ) {
         DetailLoanText(
-            title = "Jenis Angsuran", text = kpr
-                .installmentsType.name
+            title = "Jenis Angsuran", text = kpr.getTitle(LocalContext.current)
         )
-        DetailLoanText(title = "Pinjaman", text = "Rp ${kpr.totalLoan}")
-        DetailLoanText(title = "DP (${kpr.dp}%)", text = "Rp ${kpr.dpAmount}")
-        DetailLoanText(title = "Pinjaman Dibayar", text = "Rp ${kpr.loanToPay}")
+        DetailLoanText(title = "Pinjaman", text = kpr.totalLoan)
+        DetailLoanText(title = "DP (${kpr.dp}%)", text = kpr.dpAmount)
+        DetailLoanText(title = "Pinjaman Dibayar", text = kpr.loanToPay)
         DetailLoanText(
             title = "Bunga (Riba)", text = "${kpr.interest}%"
         )
@@ -170,7 +170,7 @@ private fun ShowDetail(kpr: Kpr = Kpr()) {
                 .years.toString()
         )
         DetailLoanText(
-            title = "Pertambahan (${kpr.interestAtPercentage}%)", text = "Rp ${kpr.interestAmount}"
+            title = "Pertambahan (${kpr.interestAtPercentage}%)", text = kpr.interestAmount
         )
     }
 }

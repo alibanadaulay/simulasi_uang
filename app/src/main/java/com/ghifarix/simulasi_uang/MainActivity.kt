@@ -90,7 +90,7 @@ class MainActivity : ComponentActivity() {
                                     )
                                 }
                                 Text(
-                                    "Simulation Uang",
+                                    text = stringResource(id = R.string.app_name),
                                     modifier = Modifier.padding(16.dp),
                                     fontSize = 20.sp,
                                     fontWeight = FontWeight.Bold

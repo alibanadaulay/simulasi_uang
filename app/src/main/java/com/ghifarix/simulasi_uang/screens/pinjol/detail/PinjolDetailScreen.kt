@@ -168,9 +168,9 @@ private fun ShowDetail(pinjol: Pinjol = Pinjol()) {
             title = "Jenis Angsuran", text = pinjol
                 .installmentsType.name
         )
-        DetailLoanText(title = "Pinjaman", text = "Rp ${pinjol.totalLoan}")
-        DetailLoanText(title = "Biaya Layanan (${pinjol.dp}%)", text = "Rp ${pinjol.dpAmount}")
-        DetailLoanText(title = "Pinjaman Dibayar", text = "Rp ${pinjol.loanToPay}")
+        DetailLoanText(title = "Pinjaman", text = pinjol.totalLoan)
+        DetailLoanText(title = "Biaya Layanan (${pinjol.dp}%)", text = pinjol.dpAmount)
+        DetailLoanText(title = "Pinjaman Dibayar", text = pinjol.loanToPay)
         DetailLoanText(
             title = "Bunga (Riba)", text = "${pinjol.interest}%"
         )
@@ -180,7 +180,8 @@ private fun ShowDetail(pinjol: Pinjol = Pinjol()) {
         )
         DetailLoanText(
             title = "Pertambahan (${pinjol.interestAtPercentage}%)",
-            text = "Rp ${pinjol.interestAmount}"
+            text =
+            pinjol.interestAmount
         )
     }
 }

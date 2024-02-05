@@ -34,4 +34,11 @@
     <string name="mortgage">Mortgage</string>
     <string name="debt_duration">Debt Duration</string>
     <string name="riba">Usury</string>
+    <string name="down_payment">Down Payment</string>
+    <string name="return_rate">Return Rate</string>
+
+
+    <string name="annuity">Annuity</string>
+    <string name="flat">Flat</string>
+    <string name="effective">Effective</string>
 </resources>

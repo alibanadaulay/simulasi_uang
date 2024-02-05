@@ -87,7 +87,7 @@ fun KprInputScreen(
                     .padding(all = 8.dp)
                 TextFieldDisplay(
                     modifier = modifier.weight(0.7f),
-                    label = "Rupiah",
+                    label = stringResource(id = R.string.down_payment),
                     text = dpAmount,
                     readOnly = true,
                     icon = Icons.Default.Money
@@ -132,7 +132,7 @@ private fun KprType(
             shape = RoundedCornerShape(8.dp)
         ) {
             Text(
-                text = KprType.ANUITAS.name,
+                text = stringResource(R.string.annuity),
             )
         }
         Spacer(modifier = Modifier.width(2.dp))
@@ -149,7 +149,7 @@ private fun KprType(
             shape = RoundedCornerShape(8.dp)
         ) {
             Text(
-                text = KprType.FLAT.name,
+                text = stringResource(id = R.string.flat),
             )
         }
         Spacer(modifier = Modifier.width(2.dp))
@@ -166,7 +166,7 @@ private fun KprType(
             shape = RoundedCornerShape(8.dp)
         ) {
             Text(
-                text = KprType.EFEKTIF.name,
+                text = stringResource(id = R.string.effective),
             )
         }
         Spacer(modifier = Modifier.width(2.dp))
@@ -181,8 +181,14 @@ private fun getColor(type: KprType, state: State<KprType>): Color {
 }
 
 
-@Preview
+@Preview(locale = "en")
 @Composable
 fun BaseLoanPreview() {
     BaseLoan()
+}
+
+@Preview(locale = "en")
+@Composable
+fun KPRTypePreview() {
+    KprType()
 }

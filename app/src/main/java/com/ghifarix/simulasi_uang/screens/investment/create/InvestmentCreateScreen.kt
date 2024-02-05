@@ -57,7 +57,7 @@ fun InvestmentCreateScreen(
                 )
                 TextFieldCustom(
                     modifier = modifier,
-                    label = "${stringResource(id = R.string.increase)} %",
+                    label = "${stringResource(id = R.string.return_rate)} %",
                     onTextChanged = vm::updateInvestment
                 )
             }

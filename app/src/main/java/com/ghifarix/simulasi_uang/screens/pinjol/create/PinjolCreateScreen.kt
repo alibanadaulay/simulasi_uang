@@ -78,7 +78,7 @@ fun PinjolCreateScreen(
                     .padding(all = 8.dp)
                 TextFieldDisplay(
                     modifier = modifier.weight(0.5f),
-                    label = "Rupiah",
+                    label = stringResource(id = R.string.subscription_fee),
                     text = dpAmount,
                     readOnly = true,
                     icon = Icons.Default.Money
