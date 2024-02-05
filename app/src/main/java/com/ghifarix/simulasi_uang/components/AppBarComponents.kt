@@ -63,7 +63,8 @@ fun TopAppBack(
                 override fun onAdDismissedFullScreenContent() {
                     Log.d(tag, "Ad dismissed fullscreen content.");
                     initAds(it)
-                    toastGeneratePdfSuccess(context)
+                    val filename = toastGeneratePdfSuccess(context)
+                    openPdf(context = context, fileName = filename)
                 }
 
                 override fun onAdFailedToShowFullScreenContent(adError: AdError) {

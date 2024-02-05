@@ -6,6 +6,7 @@ import com.ghifarix.simulasi_uang.model.Pdf
 import com.ghifarix.simulasi_uang.model.PdfItem
 import com.ghifarix.simulasi_uang.screens.investment.model.Investment
 import com.ghifarix.simulasi_uang.screens.kpr.model.Kpr
+import com.ghifarix.simulasi_uang.screens.kpr.model.getTitle
 import com.ghifarix.simulasi_uang.screens.pinjol.model.Pinjol
 import com.ghifarix.simulasi_uang.screens.pinjol.model.PinjolType
 
@@ -50,25 +51,37 @@ class SingletonModel {
     fun generatePdf(context: Context, generatePdf: GeneratePdf) {
         _pdf = when (generatePdf) {
             GeneratePdf.KPR -> getPdfByKpr(context = context)
-            GeneratePdf.PINJOL -> getPdfByPinjol()
-            GeneratePdf.INVESTASI -> getPdfByPinjol()
+            GeneratePdf.PINJOL -> getPdfByPinjol(context = context)
+            GeneratePdf.INVESTASI -> getPdfByPinjol(context = context)
         }
     }
 
     fun getPdf() = _pdf
-    fun getPdfByPinjol(): Pdf {
+    private fun getPdfByPinjol(context: Context): Pdf {
         val map = mutableMapOf<String, String>()
         val items: MutableList<PdfItem> = mutableListOf()
         _pinjol?.let {
-            map["Jenis Angsuran"] = it.installmentsType.name
-            map["Pinjaman"] = "Rp ${it.totalLoan}"
-            map["DP (${it.dp})"] = "Rp ${it.dpAmount}"
-            map["Pinjaman Dibayar"] = "Rp ${it.loanToPay}"
-            map["Bunga (Riba)"] = it.interest.toString()
-            map["Lama Pinjaman (${if (it.installmentsType == PinjolType.Harian) "Harian" else "Bulanan"})"] =
+            map[context.getString(R.string.installment_type)] = it.installmentsType.name
+            map[context.getString(R.string.loan)] = it.totalLoan
+            map["${context.getString(R.string.down_payment)} (${it.dp})"] = it.dpAmount
+            map[context.getString(R.string.loan_paid)] = it.loanToPay
+            map["${context.getString(R.string.interest)} (${context.getString(R.string.riba)})"] =
+                it.interest.toString()
+            map["${context.getString(R.string.loan_duration)} (${
+                if (it.installmentsType == PinjolType.Harian) context.getString(
+                    R.string.daily
+                ) else context.getString(R.string.monthly)
+            })"] =
                 it.loanTime.toString()
-            map["Pertambahan (${it.interestAtPercentage})"] = "Rp ${it.interestAmount}"
-            items.add(PdfItem(type = if (it.installmentsType == PinjolType.Harian) "Hari" else "Bulan"))
+            map["${context.getString(R.string.increase)} (${it.interestAtPercentage})"] =
+                it.interestAmount
+            items.add(
+                PdfItem(
+                    type = if (it.installmentsType == PinjolType.Harian) context.getString(
+                        R.string.day
+                    ) else context.getString(R.string.month)
+                )
+            )
             for (i in 0 until it.pinjolItems.size) {
                 val item = it.pinjolItems[i]
                 items.add(
@@ -85,17 +98,20 @@ class SingletonModel {
         return Pdf(model = map, items = items)
     }
 
-    fun getPdfByKpr(context: Context): Pdf {
+    private fun getPdfByKpr(context: Context): Pdf {
         val map = mutableMapOf<String, String>()
         val items: MutableList<PdfItem> = mutableListOf()
         _kpr?.let {
-            map[context.getString(R.string.installment_type)] = it.installmentsType.name
-            map[context.getString(R.string.loan)] = "Rp ${it.totalLoan}"
-            map["${context.getString(R.string.service_fee)} (${it.dp})"] = "Rp ${it.dpAmount}"
-            map["Pinjaman Dibayar"] = "Rp ${it.loanToPay}"
-            map["Bunga (Riba)"] = it.interest.toString()
-            map["Lama Pinjaman (Tahun)"] = it.years.toString()
-            map["Pertambahan (${it.interestAtPercentage})"] = "Rp ${it.interestAmount}"
+            map[context.getString(R.string.installment_type)] = it.getTitle(context)
+            map[context.getString(R.string.loan)] = it.totalLoan
+            map["${context.getString(R.string.service_fee)} (${it.dp}%)"] = it.dpAmount
+            map[context.getString(R.string.loan_paid)] = it.loanToPay
+            map["${context.getString(R.string.interest)} (${context.getString(R.string.riba)})"] =
+                it.interest.toString()
+            map["${context.getString(R.string.loan_duration)} (${context.getString(R.string.year)})"] =
+                it.years.toString()
+            map["${context.getString(R.string.interest)} (${it.interestAtPercentage}%)"] =
+                it.interestAmount
             items.add(PdfItem())
             for (i in 0 until it.kprItems.size) {
                 val item = it.kprItems[i]
@@ -113,5 +129,11 @@ class SingletonModel {
         return Pdf(model = map, items = items)
     }
 
-
+//    private fun getInvestmentByKpr(context: Context):Pdf{
+//        val map = mutableMapOf<String, String>()
+//        val items: MutableList<PdfItem> = mutableListOf()
+//        _investment?.let {
+//            map[""] =
+//        }
+//    }
 }

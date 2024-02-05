@@ -41,4 +41,6 @@
     <string name="annuity">Annuity</string>
     <string name="flat">Flat</string>
     <string name="effective">Effective</string>
+    <string name="loan_duration">Lama Pinjaman</string>
+    <string name="loan_paid">Pinjaman Dibayar</string>
 </resources>

@@ -97,7 +97,7 @@ fun Context.generatePdf(pdf: Pdf? = SingletonModel.getInstance().getPdf()): Stri
     val bmp: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.icon)
     val scaledbmp: Bitmap = Bitmap.createScaledBitmap(bmp, 140, 140, false)
 
-    val totalPage = (pdf.items.size / 27.0).roundToInt()
+    val totalPage = (pdf.items.size / 25.0).roundToInt()
 
     var listShow = pdf.items.size
     for (i in 0 until totalPage) {

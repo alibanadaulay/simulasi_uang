@@ -46,4 +46,6 @@
     <string name="ad_mob_test_interstitial_ad" translatable="false">ca-app-pub-3940256099942544/1033173712</string>
     <string name="ad_mob_interstitial_ad" translatable="false">ca-app-pub-3134124105900068/6991287904</string>
     <string name="ad_mob_test_reward_ad" translatable="false">ca-app-pub-3940256099942544/5224354917</string>
+    <string name="loan_duration">Lama Pinjaman</string>
+    <string name="loan_paid">Pinjaman Dibayar</string>
 </resources>
