@@ -70,7 +70,6 @@ fun InvestmentDetailScreen(
                 rewardAds.value?.show(it) {
 
                 }
-
             })
     }) {
         when (state) {

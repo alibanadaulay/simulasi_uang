@@ -52,7 +52,7 @@ class SingletonModel {
         _pdf = when (generatePdf) {
             GeneratePdf.KPR -> getPdfByKpr(context = context)
             GeneratePdf.PINJOL -> getPdfByPinjol(context = context)
-            GeneratePdf.INVESTASI -> getPdfByPinjol(context = context)
+            GeneratePdf.INVESTASI -> getPdfByInvestment(context = context)
         }
     }
 
@@ -129,11 +129,41 @@ class SingletonModel {
         return Pdf(model = map, items = items)
     }
 
-//    private fun getInvestmentByKpr(context: Context):Pdf{
-//        val map = mutableMapOf<String, String>()
-//        val items: MutableList<PdfItem> = mutableListOf()
-//        _investment?.let {
-//            map[""] =
-//        }
-//    }
+    private fun getPdfByInvestment(context: Context): Pdf {
+        val map = mutableMapOf<String, String>()
+        val items: MutableList<PdfItem> = mutableListOf()
+        _investment?.let {
+            map[context.getString(R.string.base_capital)] = it.baseInvestment
+            map[context.getString(R.string.total_investment)] = it.totalInvestment
+            map[context.getString(R.string.investment_duration)] = it.investmentTime.toString()
+            map[context.getString(R.string.investment_duration)] =
+                "${it.increaseTime} ${context.getString(R.string.year)}"
+            map["${context.getString(R.string.return_rate)} (${it.investmentRate}%)"] =
+                it.amountIncrease
+            map[context.getString(R.string.total_increase)] = it.amountIncrease
+            map[context.getString(R.string.tax)] = "${it.tax} %"
+            items.add(
+                PdfItem(
+                    type = context.getString(R.string.year),
+                    interest = context.getString(R.string.increase),
+                    capital = context.getString(R.string.tax),
+                    instalments = context.getString(R.string.capital_increase),
+                    remainingLoan = context.getString(R.string.investment)
+                )
+            )
+            for (i in 0 until it.investmentItem.size) {
+                val item = it.investmentItem[i]
+                items.add(
+                    PdfItem(
+                        type = item.time,
+                        interest = item.investmentIncrease,
+                        capital = item.tax,
+                        instalments = item.increaseCapital,
+                        remainingLoan = item.investment
+                    )
+                )
+            }
+        }
+        return Pdf(model = map, items = items)
+    }
 }

@@ -48,4 +48,5 @@
     <string name="ad_mob_test_reward_ad" translatable="false">ca-app-pub-3940256099942544/5224354917</string>
     <string name="loan_duration">Lama Pinjaman</string>
     <string name="loan_paid">Pinjaman Dibayar</string>
+    <string name="total_increase">Total Pertambahan</string>
 </resources>
