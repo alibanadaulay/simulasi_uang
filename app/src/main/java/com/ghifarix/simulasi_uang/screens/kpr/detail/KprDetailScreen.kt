@@ -35,14 +35,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ghifarix.simulasi_uang.R
-import com.ghifarix.simulasi_uang.components.BannerAdsView
 import com.ghifarix.simulasi_uang.components.DetailLoanItemText
 import com.ghifarix.simulasi_uang.components.TitleText
 import com.ghifarix.simulasi_uang.components.TopAppBack
 import com.ghifarix.simulasi_uang.model.GeneratePdf
 import com.ghifarix.simulasi_uang.screens.kpr.model.Kpr
 import com.ghifarix.simulasi_uang.screens.kpr.model.getTitle
-import com.google.android.gms.ads.AdSize
 
 
 private const val TAG = "KprDetailScreen"
@@ -53,27 +51,20 @@ fun KprDetailScreen(kprDetailViewModel: KprDetailViewModel, onBack: () -> Unit =
         kprDetailViewModel.getKpr()
     }
 
-    val rewardedAd = kprDetailViewModel.rewardAd.collectAsState()
     val state = kprDetailViewModel.state.collectAsState().value
     val context = LocalContext.current
 
     Scaffold(topBar = {
         TopAppBack(context = context,
-            rewardAds = rewardedAd,
             onBack = onBack,
-            initAds = kprDetailViewModel::updateRewardAd,
             title = stringResource(id = R.string.kpr_detail),
             generatePdf = GeneratePdf.KPR,
-            showingAds = {
-                rewardedAd.value?.show(it) {}
-            }
         )
     }) { pads ->
         when (state) {
             is KprDetailState.LoadKprDetails -> {
                 Column(modifier = Modifier.padding(pads)) {
                     ShowDetail(kpr = state.kpr)
-                    BannerAdsView(adSize = AdSize.LARGE_BANNER)
                     ShowList(kpr = state.kpr)
                 }
             }

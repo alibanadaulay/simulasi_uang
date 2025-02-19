@@ -34,14 +34,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ghifarix.simulasi_uang.R
-import com.ghifarix.simulasi_uang.components.BannerAdsView
 import com.ghifarix.simulasi_uang.components.DetailLoanText
 import com.ghifarix.simulasi_uang.components.TitleText
 import com.ghifarix.simulasi_uang.components.TopAppBack
 import com.ghifarix.simulasi_uang.model.GeneratePdf
 import com.ghifarix.simulasi_uang.screens.investment.model.Investment
 import com.ghifarix.simulasi_uang.screens.investment.model.InvestmentItem
-import com.google.android.gms.ads.AdSize
 import com.ghifarix.simulasi_uang.components.DetailLoanItemText as DetailLoanItemText1
 
 @Composable
@@ -50,7 +48,6 @@ fun InvestmentDetailScreen(
     onBack: () -> Unit = {}
 ) {
 
-    val rewardAds = viewModel.rewardAd.collectAsState()
     val state = viewModel.state.collectAsState().value
     val context = LocalContext.current
 
@@ -61,16 +58,10 @@ fun InvestmentDetailScreen(
     Scaffold(topBar = {
         TopAppBack(
             context = context,
-            rewardAds = rewardAds,
             title = stringResource(id = R.string.investment_detail_title),
             onBack = onBack,
-            initAds = viewModel::updateRewardAds,
             generatePdf = GeneratePdf.INVESTASI,
-            showingAds = {
-                rewardAds.value?.show(it) {
-
-                }
-            })
+            )
     }) {
         when (state) {
             InvestmentDetailState.Idle -> {}
@@ -140,9 +131,6 @@ fun LoadDataSuccess(
                 )
             }
         }
-        BannerAdsView(
-            adSize = AdSize.LARGE_BANNER
-        )
         ShowListInvestmentItems(investmentList = investment.investmentItem)
     }
 }

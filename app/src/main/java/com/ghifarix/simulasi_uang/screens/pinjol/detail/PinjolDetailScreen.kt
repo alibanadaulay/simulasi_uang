@@ -38,14 +38,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ghifarix.simulasi_uang.R
-import com.ghifarix.simulasi_uang.components.BannerAdsView
 import com.ghifarix.simulasi_uang.components.DetailLoanItemText
 import com.ghifarix.simulasi_uang.components.DetailLoanText
 import com.ghifarix.simulasi_uang.components.TopAppBack
 import com.ghifarix.simulasi_uang.model.GeneratePdf
 import com.ghifarix.simulasi_uang.screens.pinjol.model.Pinjol
 import com.ghifarix.simulasi_uang.screens.pinjol.model.PinjolType
-import com.google.android.gms.ads.AdSize
 
 private const val textDp = 150
 
@@ -56,31 +54,22 @@ fun PinjolDetailScreen(kprDetailViewModel: PinjolDetailViewModel, onBack: () -> 
     }
 
     val state = kprDetailViewModel.state.collectAsState().value
-    val rewardedAd = kprDetailViewModel.rewardAds.collectAsState()
     val context = LocalContext.current
 
     Scaffold(topBar = {
         TopAppBack(
             context = context,
-            rewardAds = rewardedAd,
             onBack = onBack,
             title = stringResource(
                 id = R.string.pinjol_detail
             ),
-            initAds = kprDetailViewModel::updateRewardAds,
             generatePdf = GeneratePdf.PINJOL,
-            showingAds = {
-                rewardedAd.value?.show(it) {}
-            }
         )
     }) { pads ->
         when (state) {
             is PinjolDetailState.LoadPinjolDetails -> {
                 Column(modifier = Modifier.padding(pads)) {
                     ShowDetail(pinjol = state.pinjol)
-                    BannerAdsView(
-                        adSize = AdSize.LARGE_BANNER,
-                    )
                     ShowList(pinjol = state.pinjol)
                 }
             }

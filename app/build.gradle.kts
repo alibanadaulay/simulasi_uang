@@ -8,6 +8,7 @@ plugins {
     id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
     id("com.google.firebase.crashlytics")
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 private val keyProperties = Properties()
 val keyPropertiesFile = project.rootProject.file("local.properties")
@@ -61,12 +62,6 @@ android {
         compose = true
         buildConfig = true
     }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.4"
-    }
-
-
 }
 
 dependencies {
@@ -105,7 +100,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-crashlytics")
-    implementation("com.google.android.gms:play-services-ads:22.5.0")
+//    implementation("com.google.android.gms:play-services-ads:22.5.0")
 
     implementation("org.bouncycastle:bcpkix-jdk18on:1.76")
 }

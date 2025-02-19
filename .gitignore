@@ -32,6 +32,7 @@
 *.apk
 *.ap_
 *.aab
+*.pem
 
 /buildSrc/build/
 .DS_Store

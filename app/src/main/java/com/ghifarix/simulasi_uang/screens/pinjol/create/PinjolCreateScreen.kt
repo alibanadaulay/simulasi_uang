@@ -34,7 +34,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ghifarix.simulasi_uang.R
-import com.ghifarix.simulasi_uang.components.BannerAdsView
 import com.ghifarix.simulasi_uang.components.BaseLoan
 import com.ghifarix.simulasi_uang.components.SubmitButton
 import com.ghifarix.simulasi_uang.components.TextFieldCustom
@@ -131,7 +130,6 @@ fun PinjolCreateScreen(
                 text = stringResource(id = R.string.calculate)
             )
             Spacer(modifier = Modifier.weight(1f))
-            BannerAdsView()
         }
     }
 }

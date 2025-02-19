@@ -10,18 +10,10 @@ import android.graphics.Paint
 import android.graphics.Typeface
 import android.graphics.pdf.PdfDocument
 import android.os.Environment
-import android.util.Log
 import androidx.core.content.ContextCompat
-import com.ghifarix.simulasi_uang.BuildConfig
 import com.ghifarix.simulasi_uang.R
 import com.ghifarix.simulasi_uang.SingletonModel
 import com.ghifarix.simulasi_uang.model.Pdf
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.ads.interstitial.InterstitialAd
-import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
-import com.google.android.gms.ads.rewarded.RewardedAd
-import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import java.io.File
 import java.io.FileOutputStream
 import java.util.Date
@@ -37,50 +29,50 @@ internal fun Context.getActivity(): Activity {
     throw IllegalStateException("Permissions should be called in the context of an Activity")
 }
 
-internal fun Context.interstitialAd(onCallback: (InterstitialAd?) -> Unit) {
-    val adRequest = AdRequest.Builder().build()
-    val unitId = if (BuildConfig.BUILD_TYPE == "debug") {
-        this.getString(R.string.ad_mob_test_interstitial_ad)
-    } else {
-        this.getString(R.string.ad_mob_interstitial_ad)
-    }
-    InterstitialAd.load(this, unitId, adRequest, object :
-        InterstitialAdLoadCallback() {
-        override fun onAdLoaded(interstitialAd: InterstitialAd) {
-            super.onAdLoaded(interstitialAd)
-            Log.d("intersialAd", "onAdLoaded $interstitialAd")
-            onCallback(interstitialAd)
-        }
-
-        override fun onAdFailedToLoad(interstitialAd: LoadAdError) {
-            super.onAdFailedToLoad(interstitialAd)
-            Log.d("intersialAd", "onAdFailedToLoad $interstitialAd")
-            onCallback(null)
-        }
-    })
-}
-
-internal fun Context.rewardAd(onCallback: (RewardedAd?) -> Unit) {
-    val adRequest = AdRequest.Builder().build()
-    val unitId = if (BuildConfig.BUILD_TYPE == "debug") {
-        this.getString(R.string.ad_mob_test_reward_ad)
-    } else {
-        this.getString(R.string.ad_mob_interstitial_ad)
-    }
-    RewardedAd.load(this, unitId, adRequest, object : RewardedAdLoadCallback() {
-        override fun onAdFailedToLoad(p0: LoadAdError) {
-            super.onAdFailedToLoad(p0)
-            Log.d("rewardAd", "onAdLoaded $p0")
-            onCallback(null)
-        }
-
-        override fun onAdLoaded(p0: RewardedAd) {
-            super.onAdLoaded(p0)
-            Log.d("rewardAd", "onAdLoaded $p0")
-            onCallback(p0)
-        }
-    })
-}
+//internal fun Context.interstitialAd(onCallback: (InterstitialAd?) -> Unit) {
+//    val adRequest = AdRequest.Builder().build()
+//    val unitId = if (BuildConfig.BUILD_TYPE == "debug") {
+//        this.getString(R.string.ad_mob_test_interstitial_ad)
+//    } else {
+//        this.getString(R.string.ad_mob_interstitial_ad)
+//    }
+//    InterstitialAd.load(this, unitId, adRequest, object :
+//        InterstitialAdLoadCallback() {
+//        override fun onAdLoaded(interstitialAd: InterstitialAd) {
+//            super.onAdLoaded(interstitialAd)
+//            Log.d("intersialAd", "onAdLoaded $interstitialAd")
+//            onCallback(interstitialAd)
+//        }
+//
+//        override fun onAdFailedToLoad(interstitialAd: LoadAdError) {
+//            super.onAdFailedToLoad(interstitialAd)
+//            Log.d("intersialAd", "onAdFailedToLoad $interstitialAd")
+//            onCallback(null)
+//        }
+//    })
+//}
+//
+//internal fun Context.rewardAd(onCallback: (RewardedAd?) -> Unit) {
+//    val adRequest = AdRequest.Builder().build()
+//    val unitId = if (BuildConfig.BUILD_TYPE == "debug") {
+//        this.getString(R.string.ad_mob_test_reward_ad)
+//    } else {
+//        this.getString(R.string.ad_mob_interstitial_ad)
+//    }
+//    RewardedAd.load(this, unitId, adRequest, object : RewardedAdLoadCallback() {
+//        override fun onAdFailedToLoad(p0: LoadAdError) {
+//            super.onAdFailedToLoad(p0)
+//            Log.d("rewardAd", "onAdLoaded $p0")
+//            onCallback(null)
+//        }
+//
+//        override fun onAdLoaded(p0: RewardedAd) {
+//            super.onAdLoaded(p0)
+//            Log.d("rewardAd", "onAdLoaded $p0")
+//            onCallback(p0)
+//        }
+//    })
+//}
 
 fun Context.generatePdf(pdf: Pdf? = SingletonModel.getInstance().getPdf()): String? {
     if (pdf == null) {

@@ -39,8 +39,6 @@ import com.ghifarix.simulasi_uang.screens.pinjol.create.pinjolCreateNav
 import com.ghifarix.simulasi_uang.screens.pinjol.detail.pinjolDetailNav
 import com.ghifarix.simulasi_uang.theme.DarkColorPalette
 import com.ghifarix.simulasi_uang.theme.LightColorPalette
-import com.google.android.gms.ads.MobileAds
-import com.google.android.gms.ads.RequestConfiguration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -48,11 +46,6 @@ import kotlinx.coroutines.launch
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        MobileAds.initialize(this) {}
-        MobileAds.setRequestConfiguration(
-            RequestConfiguration.Builder()
-                .setTestDeviceIds(listOf("FE3D232A299C3A41B61491040D192DD9")).build()
-        )
         super.onCreate(savedInstanceState)
         setContent {
             val colors = if (isSystemInDarkTheme()) {
