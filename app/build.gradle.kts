@@ -24,7 +24,7 @@ android {
         applicationId = "com.ghifarix.simulasi_uang"
         minSdk = 26
         targetSdk = 34
-        versionCode = 6
+        versionCode = 8
         versionName = "1.0.4"
 
         vectorDrawables.useSupportLibrary = true
