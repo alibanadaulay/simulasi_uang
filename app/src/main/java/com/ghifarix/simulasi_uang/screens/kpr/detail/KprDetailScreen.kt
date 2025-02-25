@@ -58,7 +58,6 @@ fun KprDetailScreen(kprDetailViewModel: KprDetailViewModel, onBack: () -> Unit =
         TopAppBack(context = context,
             onBack = onBack,
             title = stringResource(id = R.string.kpr_detail),
-            generatePdf = GeneratePdf.KPR,
         )
     }) { pads ->
         when (state) {

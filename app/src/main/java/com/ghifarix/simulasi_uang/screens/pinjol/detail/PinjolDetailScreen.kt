@@ -63,7 +63,6 @@ fun PinjolDetailScreen(kprDetailViewModel: PinjolDetailViewModel, onBack: () -> 
             title = stringResource(
                 id = R.string.pinjol_detail
             ),
-            generatePdf = GeneratePdf.PINJOL,
         )
     }) { pads ->
         when (state) {

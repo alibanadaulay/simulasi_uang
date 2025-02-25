@@ -60,7 +60,6 @@ fun InvestmentDetailScreen(
             context = context,
             title = stringResource(id = R.string.investment_detail_title),
             onBack = onBack,
-            generatePdf = GeneratePdf.INVESTASI,
             )
     }) {
         when (state) {

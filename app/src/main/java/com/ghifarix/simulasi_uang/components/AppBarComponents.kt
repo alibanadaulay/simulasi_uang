@@ -44,7 +44,6 @@ fun TopAppBack(
     context: Context,
     title: String = "title",
     onBack: () -> Unit = {},
-    generatePdf: GeneratePdf = GeneratePdf.KPR
 ) {
     TopAppBar(title = {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -58,15 +57,15 @@ fun TopAppBack(
             }
             Text(text = title)
             Spacer(modifier = Modifier.weight(1f))
-            IconButton(onClick = {
-                SingletonModel.getInstance()
-                    .generatePdf(context = context, generatePdf = GeneratePdf.KPR)
-            }) {
-                Icon(
-                    imageVector = Icons.Default.Download,
-                    contentDescription = title
-                )
-            }
+//            IconButton(onClick = {
+//                SingletonModel.getInstance()
+//                    .generatePdf(context = context, generatePdf = GeneratePdf.KPR)
+//            }) {
+//                Icon(
+//                    imageVector = Icons.Default.Download,
+//                    contentDescription = title
+//                )
+//            }
         }
     })
 }
